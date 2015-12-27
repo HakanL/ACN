@@ -151,10 +151,6 @@ namespace Citp.Packets
             CitpPacket packet = null;
             switch (header.ContentType)
             {
-                case SDmxCapabilities.PacketType:
-                    packet = new SDmxCapabilities();
-                    break;
-                
                 case SDmxEncryptionIdentifier.PacketType:
                     packet = new SDmxEncryptionIdentifier();
                     break;
@@ -166,9 +162,6 @@ namespace Citp.Packets
                     break;
                 case SDmxSetExternalSource.PacketType:
                     packet = new SDmxSetExternalSource();
-                    break;
-                case SDmxChannelList.PacketType:
-                    packet = new SDmxChannelList();
                     break;
                 default:
                     return null;
@@ -264,12 +257,6 @@ namespace Citp.Packets
                     break;
                 case CaExContentCodes.ClearRecorder:
                     packet = new CaExClearRecorder();
-                    break;
-                case CaExContentCodes.EnterShow:
-                    packet = new CaExEnterShow();
-                    break;
-                case CaExContentCodes.LeaveShow:
-                    packet = new CaExLeaveShow();
                     break;
                 default:
                     return null;
