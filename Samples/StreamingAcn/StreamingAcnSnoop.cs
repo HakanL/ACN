@@ -97,25 +97,26 @@ namespace StreamingAcn
             CardInfo firstCard = null;
             foreach (NetworkInterface adapter in NetworkInterface.GetAllNetworkInterfaces())
             {
-                if (adapter.SupportsMulticast)
+                if (adapter.SupportsMulticast && adapter.OperationalStatus == OperationalStatus.Up)
                 {
                     IPInterfaceProperties ipProperties = adapter.GetIPProperties();
 
                     for (int n = 0; n < ipProperties.UnicastAddresses.Count; n++)
                     {
                         CardInfo card = new CardInfo(adapter, n);
-                        if(card.IpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                        if (card.IpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
                         {
                             networkCardSelect.Items.Add(card);
-                        }
 
-                        firstCard = card;
+                            if (firstCard == null)
+                                firstCard = card;
+                        }
                     }
                 }
             }
 
-            if(firstCard != null)
-             Start(firstCard,((IEnumerable<int>) new int[] {int.Parse(toolStripTextBox1.Text)}));
+            if (firstCard != null)
+                Start(firstCard, ((IEnumerable<int>)new int[] { int.Parse(toolStripTextBox1.Text) }));
         }
 
         private void SetupGrid()
@@ -190,7 +191,7 @@ namespace StreamingAcn
         {
             if (e.RowIndex < 0)
                 return;
-            
+
             RdmNetEndPoint endpoint = portGrid.Rows[e.RowIndex].DataBoundItem as RdmNetEndPoint;
             if (endpoint != null)
             {
@@ -200,8 +201,8 @@ namespace StreamingAcn
         }
 
         void portGrid_CellClick(object sender, DataGridViewCellEventArgs e)
-        {            
-            if(e.RowIndex >=0)
+        {
+            if (e.RowIndex >= 0)
             {
                 RdmNetEndPoint endpoint = portGrid.Rows[e.RowIndex].DataBoundItem as RdmNetEndPoint;
                 if (endpoint != null)
@@ -212,7 +213,7 @@ namespace StreamingAcn
                             endpoint.AcnUniverse = endpoint.Universe;
                         else
                             endpoint.AcnUniverse = 0;
-                    }                    
+                    }
 
                     if (e.ColumnIndex == portGrid.Columns["Identify"].Index)
                         endpoint.Identify = !endpoint.Identify;
@@ -241,7 +242,7 @@ namespace StreamingAcn
         public int SelectedUniverse
         {
             get { return selectedUniverse; }
-            set 
+            set
             {
                 if (selectedUniverse != value)
                 {
@@ -274,7 +275,7 @@ namespace StreamingAcn
                 {
                     MessageBox.Show(ex.Message, "Set Universe");
                 }
-                
+
             }
         }
 
@@ -304,7 +305,7 @@ namespace StreamingAcn
 
         private ChannelCell selectedChannel = null;
 
-        public ChannelCell SelectedChannel 
+        public ChannelCell SelectedChannel
         {
             get { return selectedChannel; }
             set
@@ -343,7 +344,7 @@ namespace StreamingAcn
 
         private void levelFull_Click(object sender, EventArgs e)
         {
-            sendData.SetLevel(SelectedChannel.Channel,255);
+            sendData.SetLevel(SelectedChannel.Channel, 255);
             levelBar.Value = sendData.DmxData[SelectedChannel.Channel];
         }
 
@@ -355,7 +356,7 @@ namespace StreamingAcn
 
         private void levelBar_Scroll(object sender, EventArgs e)
         {
-            sendData.SetLevel(SelectedChannel.Channel, (byte) levelBar.Value);
+            sendData.SetLevel(SelectedChannel.Channel, (byte)levelBar.Value);
         }
 
         void cell_Click(object sender, EventArgs e)
