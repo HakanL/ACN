@@ -27,6 +27,10 @@ namespace Acn.ArtNet.Sockets
             RdmId = rdmId;
         }
 
+        public ArtNetSocket()
+            : this(UId.Empty)
+        {
+        }
         #region Information
 
         /// <summary>
@@ -34,7 +38,7 @@ namespace Acn.ArtNet.Sockets
         /// </summary>
         public UId RdmId { get; protected set; }
 
-        private bool portOpen= false;
+        private bool portOpen = false;
 
         public bool PortOpen
         {
@@ -81,9 +85,9 @@ namespace Acn.ArtNet.Sockets
         }
 
         #endregion
-        
-	
-	
+
+
+
 
         public void Open(IPAddress localIp, IPAddress localSubnetMask)
         {
@@ -104,17 +108,17 @@ namespace Acn.ArtNet.Sockets
             {
                 EndPoint localPort = new IPEndPoint(IPAddress.Any, Port);
                 ArtNetRecieveData recieveState = new ArtNetRecieveData();
-                BeginReceiveFrom(recieveState.buffer,0,recieveState.bufferSize,SocketFlags.None,ref localPort,new AsyncCallback(OnRecieve),recieveState);
+                BeginReceiveFrom(recieveState.buffer, 0, recieveState.bufferSize, SocketFlags.None, ref localPort, new AsyncCallback(OnRecieve), recieveState);
             }
             catch (Exception ex)
             {
-                OnUnhandledException(new ApplicationException("An error ocurred while trying to start recieving ArtNet.",ex));
+                OnUnhandledException(new ApplicationException("An error ocurred while trying to start recieving ArtNet.", ex));
             }
         }
 
         private void OnRecieve(IAsyncResult state)
         {
-            EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any,0);
+            EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
             if (PortOpen)
             {
@@ -131,7 +135,7 @@ namespace Acn.ArtNet.Sockets
                         {
                             LastPacket = DateTime.Now;
 
-                            ProcessPacket((IPEndPoint) remoteEndPoint, ArtNetPacket.Create(recieveState));
+                            ProcessPacket((IPEndPoint)remoteEndPoint, ArtNetPacket.Create(recieveState));
                         }
                     }
                 }
@@ -149,16 +153,16 @@ namespace Acn.ArtNet.Sockets
 
         private void ProcessPacket(IPEndPoint source, ArtNetPacket packet)
         {
-            if(packet != null)
+            if (packet != null)
             {
-                if(NewPacket != null)
-                    NewPacket(this, new NewPacketEventArgs<ArtNetPacket>(source,packet));
-                
+                if (NewPacket != null)
+                    NewPacket(this, new NewPacketEventArgs<ArtNetPacket>(source, packet));
+
                 ArtRdmPacket rdmPacket = packet as ArtRdmPacket;
-                if(rdmPacket != null && NewRdmPacket != null)
+                if (rdmPacket != null && NewRdmPacket != null)
                 {
                     RdmPacket rdm = RdmPacket.ReadPacket(new RdmBinaryReader(new MemoryStream(rdmPacket.RdmData)));
-                    NewRdmPacket(this,new NewPacketEventArgs<RdmPacket>(source,rdm)); 
+                    NewRdmPacket(this, new NewPacketEventArgs<RdmPacket>(source, rdm));
                 }
             }
         }
@@ -172,7 +176,7 @@ namespace Acn.ArtNet.Sockets
 
         public void Send(ArtNetPacket packet)
         {
-            SendTo(packet.ToArray(), new IPEndPoint(BroadcastAddress,Port));
+            SendTo(packet.ToArray(), new IPEndPoint(BroadcastAddress, Port));
         }
 
         public void Send(ArtNetPacket packet, RdmEndPoint address)
@@ -203,7 +207,7 @@ namespace Acn.ArtNet.Sockets
             RdmPacket.WritePacket(packet, rdmWriter);
 
             //Write the checksum
-            rdmWriter.WriteNetwork((short)(RdmPacket.CalculateChecksum(rdmData.GetBuffer()) + (int) RdmVersions.SubMessage + (int) DmxStartCodes.RDM));
+            rdmWriter.WriteNetwork((short)(RdmPacket.CalculateChecksum(rdmData.GetBuffer()) + (int)RdmVersions.SubMessage + (int)DmxStartCodes.RDM));
 
             //Create sACN Packet
             ArtRdmPacket rdmPacket = new ArtRdmPacket();
@@ -213,13 +217,13 @@ namespace Acn.ArtNet.Sockets
 
             Send(rdmPacket, targetAddress);
 
-            if(RdmPacketSent != null)
+            if (RdmPacketSent != null)
                 RdmPacketSent(this, new NewPacketEventArgs<RdmPacket>(new IPEndPoint(targetAddress.IpAddress, Port), packet));
         }
 
         public void SendRdm(List<RdmPacket> packets, RdmEndPoint targetAddress, UId targetId)
         {
-            if(packets.Count <1)
+            if (packets.Count < 1)
                 throw new ArgumentException("Rdm packets list is empty.");
 
             RdmPacket primaryPacket = packets[0];
@@ -230,8 +234,8 @@ namespace Acn.ArtNet.Sockets
             rdmPacket.RdmVersion = (byte)RdmVersions.SubMessage;
             rdmPacket.Command = primaryPacket.Header.Command;
             rdmPacket.ParameterId = primaryPacket.Header.ParameterId;
-            rdmPacket.SubDevice = (short) primaryPacket.Header.SubDevice;
-            rdmPacket.SubCount = (short) packets.Count;
+            rdmPacket.SubDevice = (short)primaryPacket.Header.SubDevice;
+            rdmPacket.SubCount = (short)packets.Count;
 
             MemoryStream rdmData = new MemoryStream();
             RdmBinaryWriter dataWriter = new RdmBinaryWriter(rdmData);
@@ -241,7 +245,7 @@ namespace Acn.ArtNet.Sockets
 
             rdmPacket.RdmData = rdmData.ToArray();
 
-            Send(rdmPacket,targetAddress);
+            Send(rdmPacket, targetAddress);
         }
 
         #endregion
