@@ -23,7 +23,7 @@ namespace SntpUpdate
                 { "s=|server=", "Server to request time from",  v => { serverAddress = v; addressExplicit = true; } },
                 { "c=|count=", "Number of requests to make", (int v) => count = v },
                 { "p=|port=", "The port to contact the server on", (int v) => port = v },
-                { "u|update", "Update the system clock with the recieved time", v => setSystemTime = v != null},
+                { "u|update", "Update the system clock with the received time", v => setSystemTime = v != null},
                 { "v|verbose", "Print verbose information", v => verbose = v != null},
                 { "h|?|help", "Print command line help",  v => help = v != null }
             };

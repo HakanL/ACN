@@ -8,14 +8,14 @@ using Citp.IO;
 
 namespace Citp.Sockets
 {
-    public class CitpRecieveData:MemoryStream
+    public class CitpReceiveData:MemoryStream
     {
         private CitpBinaryReader reader = null;
 
         public int ReadNibble = 64000;
         public int ReadPosition = 0;
 
-        public CitpRecieveData()
+        public CitpReceiveData()
         {
             this.Capacity = ReadNibble;
         }

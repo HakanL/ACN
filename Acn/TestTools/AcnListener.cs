@@ -71,7 +71,7 @@ namespace Acn.TestTools
         }
 
         /// <summary>
-        /// Gets the last value recieved for the source, universe and channel
+        /// Gets the last value received for the source, universe and channel
         /// </summary>
         /// <param name="source">The source.</param>
         /// <param name="universe">The universe.</param>

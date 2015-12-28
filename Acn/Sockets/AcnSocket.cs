@@ -123,10 +123,10 @@ namespace Acn.Sockets
 
             PortOpen = true;
 
-            StartRecieve(this,null);
+            StartReceive(this,null);
         }
 
-        public void StartRecieve(Socket socket, MemoryStream buffer)
+        public void StartReceive(Socket socket, MemoryStream buffer)
         {
             try
             {
@@ -139,8 +139,8 @@ namespace Acn.Sockets
                 }
                 buffer.Seek(0, SeekOrigin.Begin);
 
-                Tuple<Socket, MemoryStream> recieveState = new Tuple<Socket, MemoryStream>(socket, buffer);
-                socket.BeginReceiveFrom(buffer.GetBuffer(), 0, (int)buffer.Length, SocketFlags.None, ref localPort, new AsyncCallback(OnRecieve), recieveState);
+                Tuple<Socket, MemoryStream> receiveState = new Tuple<Socket, MemoryStream>(socket, buffer);
+                socket.BeginReceiveFrom(buffer.GetBuffer(), 0, (int)buffer.Length, SocketFlags.None, ref localPort, new AsyncCallback(OnReceive), receiveState);
             }
             catch (Exception ex)
             {
@@ -148,21 +148,21 @@ namespace Acn.Sockets
             }
         }
 
-        private void OnRecieve(IAsyncResult state)
+        private void OnReceive(IAsyncResult state)
         {
             if (PortOpen)
             {
-                Tuple<Socket, MemoryStream> recieveState = (Tuple<Socket, MemoryStream>)(state.AsyncState);
+                Tuple<Socket, MemoryStream> receiveState = (Tuple<Socket, MemoryStream>)(state.AsyncState);
 
                 try
                 {
-                    if (recieveState != null)
+                    if (receiveState != null)
                     {
                         EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
-                        int dataSize = recieveState.Item1.EndReceiveFrom(state, ref remoteEndPoint);
+                        int dataSize = receiveState.Item1.EndReceiveFrom(state, ref remoteEndPoint);
 
-                        //Protect against UDP loopback where we recieve our own packets.
-                        //Ensure we have actually recieved data.
+                        //Protect against UDP loopback where we receive our own packets.
+                        //Ensure we have actually received data.
                         if (LocalEndPoint != remoteEndPoint && dataSize > 0)
                         {
                             LastPacket = DateTime.Now;
@@ -171,9 +171,9 @@ namespace Acn.Sockets
 
                             //If this is a TCP connection then the returned enpoint will be empty and we must use the connection endpoint.
                             if (ipEndPoint.Port == 0)
-                                ipEndPoint = (IPEndPoint)recieveState.Item1.RemoteEndPoint;
+                                ipEndPoint = (IPEndPoint)receiveState.Item1.RemoteEndPoint;
 
-                            AcnBinaryReader packetReader = new AcnBinaryReader(recieveState.Item2);
+                            AcnBinaryReader packetReader = new AcnBinaryReader(receiveState.Item2);
                             ProcessAcnPacket(ipEndPoint, packetReader);
                         }
                     }
@@ -188,9 +188,9 @@ namespace Acn.Sockets
                 }
                 finally
                 {
-                    //Attempt to recieve another packet.
+                    //Attempt to receive another packet.
                     if(PortOpen)
-                        StartRecieve(recieveState.Item1, recieveState.Item2);
+                        StartReceive(receiveState.Item1, receiveState.Item2);
                 }
             }
         }

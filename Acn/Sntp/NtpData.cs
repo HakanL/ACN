@@ -657,9 +657,9 @@ namespace Acn.Sntp
                     break;
             }
             str += "\r\nOriginate (Send request): " + OriginateTimestamp.ToString("dd/MM/yyyy HH:mm:ss.fff");
-            str += "\r\nRecieve (Server recieved): " + ReceiveTimestamp.ToString("dd/MM/yyyy HH:mm:ss.fff");
+            str += "\r\nReceive (Server received): " + ReceiveTimestamp.ToString("dd/MM/yyyy HH:mm:ss.fff");
             str += "\r\nTransmit (Server reply): " + TransmitTimestamp.ToString("dd/MM/yyyy HH:mm:ss.fff");
-            str += "\r\nReception (Request recieved): " + ReceptionTimestamp.ToString("dd/MM/yyyy HH:mm:ss.fff");
+            str += "\r\nReception (Request received): " + ReceptionTimestamp.ToString("dd/MM/yyyy HH:mm:ss.fff");
             str += "\r\nServer transmit time (Local zone): " + TransmitTimestamp.ToString("dd/MM/yyyy HH:mm:ss.fff");
             str += "\r\nPrecision: " + Precision.ToString() + " ms";
             str += "\r\nPoll Interval: " + PollInterval.ToString() + " s";

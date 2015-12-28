@@ -268,8 +268,8 @@ namespace RdmSnoop
                     case "PacketsSent":
                         packetsSentLabel.Text = "Sent: " + reliableSocket.PacketsSent;
                         break;
-                    case "PacketsRecieved":
-                        packetsRecievedLabel.Text = "Recieved: " + reliableSocket.PacketsRecieved;
+                    case "PacketsReceived":
+                        packetsReceivedLabel.Text = "Received: " + reliableSocket.PacketsReceived;
                         break;
                     case "PacketsDropped":
                         droppedLabel.Text = "Dropped: " + reliableSocket.PacketsDropped;
@@ -287,7 +287,7 @@ namespace RdmSnoop
         private void UpdatePacketCount(RdmReliableSocket reliableSocket)
         {
             packetsSentLabel.Text = "Sent: " + reliableSocket.PacketsSent;
-            packetsRecievedLabel.Text = "Recieved: " + reliableSocket.PacketsRecieved;
+            packetsReceivedLabel.Text = "Received: " + reliableSocket.PacketsReceived;
             droppedLabel.Text = "Dropped: " + reliableSocket.PacketsDropped;
             transactionsLabel.Text = "Started: " + reliableSocket.TransactionsStarted;
             failedLabel.Text = "Failed: " + reliableSocket.TransactionsFailed;

@@ -27,7 +27,7 @@ namespace Citp.Sockets
 
         public virtual void Start()
         {
-            StartRecieve(new CitpRecieveData());
+            StartReceive(new CitpReceiveData());
         }
 
         protected void RaiseDisconnected()
@@ -36,12 +36,12 @@ namespace Citp.Sockets
                 Disconnected(this, EventArgs.Empty);
         }
 
-        protected void StartRecieve(CitpRecieveData recieveState)
+        protected void StartReceive(CitpReceiveData receiveState)
         {
             try
             {
-                recieveState.SetLength(recieveState.ReadPosition + recieveState.ReadNibble);
-                client.Client.BeginReceive(recieveState.GetBuffer(), recieveState.ReadPosition, recieveState.ReadNibble, SocketFlags.None, new AsyncCallback(OnRecieve), recieveState);
+                receiveState.SetLength(receiveState.ReadPosition + receiveState.ReadNibble);
+                client.Client.BeginReceive(receiveState.GetBuffer(), receiveState.ReadPosition, receiveState.ReadNibble, SocketFlags.None, new AsyncCallback(OnReceive), receiveState);
             }
             catch (Exception ex)
             {
@@ -49,30 +49,30 @@ namespace Citp.Sockets
             }
         }
 
-        private void OnRecieve(IAsyncResult state)
+        private void OnReceive(IAsyncResult state)
         {
             CitpPacket newPacket;
-            bool restartRecieve = false;
+            bool restartReceive = false;
 
-            CitpRecieveData recieveState = (CitpRecieveData)(state.AsyncState);
+            CitpReceiveData receiveState = (CitpReceiveData)(state.AsyncState);
 
             try
             {
-                if (recieveState != null && client != null && client.Connected)
+                if (receiveState != null && client != null && client.Connected)
                 {
-                    recieveState.SetLength((recieveState.Length - recieveState.ReadNibble) + client.Client.EndReceive(state));
+                    receiveState.SetLength((receiveState.Length - receiveState.ReadNibble) + client.Client.EndReceive(state));
 
-                    if (recieveState.Length > 0 && !IsDisposed())
+                    if (receiveState.Length > 0 && !IsDisposed())
                     {
-                        //We want to start the recieve again to listen for more data.
+                        //We want to start the receive again to listen for more data.
                         //Only do this when the client is in a position to do so.
-                        restartRecieve = true;
+                        restartReceive = true;
 
                         if (NewPacket != null)
                         {
-                            while (CitpPacketBuilder.TryBuild(recieveState, out newPacket))
+                            while (CitpPacketBuilder.TryBuild(receiveState, out newPacket))
                             {
-                                recieveState.ReadPosition += (int)((CitpHeader)newPacket).MessageSize;
+                                receiveState.ReadPosition += (int)((CitpHeader)newPacket).MessageSize;
 
                                 //Packet has been read successfully.
                                 NewPacket(this, new CitpNewPacketEventArgs((IPEndPoint)client.Client.LocalEndPoint, (IPEndPoint) client.Client.RemoteEndPoint, newPacket));
@@ -91,9 +91,9 @@ namespace Citp.Sockets
             }
             finally
             {
-                //Attempt to recieve another packet.
-                if (restartRecieve)
-                    StartRecieve(recieveState);
+                //Attempt to receive another packet.
+                if (restartReceive)
+                    StartReceive(receiveState);
                 else
                     RaiseDisconnected();                   
             }

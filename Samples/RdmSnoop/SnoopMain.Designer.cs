@@ -64,7 +64,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.packetsSentLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.packetsRecievedLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.packetsReceivedLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.droppedLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -424,7 +424,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel2,
             this.packetsSentLabel,
-            this.packetsRecievedLabel,
+            this.packetsReceivedLabel,
             this.toolStripStatusLabel1,
             this.droppedLabel,
             this.toolStripStatusLabel3,
@@ -449,11 +449,11 @@
             this.packetsSentLabel.Size = new System.Drawing.Size(42, 17);
             this.packetsSentLabel.Text = "Sent: 0";
             // 
-            // packetsRecievedLabel
+            // packetsReceivedLabel
             // 
-            this.packetsRecievedLabel.Name = "packetsRecievedLabel";
-            this.packetsRecievedLabel.Size = new System.Drawing.Size(66, 17);
-            this.packetsRecievedLabel.Text = "Recieved: 0";
+            this.packetsReceivedLabel.Name = "packetsReceivedLabel";
+            this.packetsReceivedLabel.Size = new System.Drawing.Size(66, 17);
+            this.packetsReceivedLabel.Text = "Received: 0";
             // 
             // toolStripStatusLabel1
             // 
@@ -572,7 +572,7 @@
         private System.Windows.Forms.ToolStripMenuItem powerOnTool;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel packetsSentLabel;
-        private System.Windows.Forms.ToolStripStatusLabel packetsRecievedLabel;
+        private System.Windows.Forms.ToolStripStatusLabel packetsReceivedLabel;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel droppedLabel;
         private System.Windows.Forms.ToolStripStatusLabel failedLabel;

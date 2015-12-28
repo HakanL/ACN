@@ -15,7 +15,7 @@ namespace Acn.ArtNet.Packets
             SubStartCode = 1;
         }
 
-        public ArtRdmPacket(ArtNetRecieveData data)
+        public ArtRdmPacket(ArtNetReceiveData data)
             : base(data)
         {
             

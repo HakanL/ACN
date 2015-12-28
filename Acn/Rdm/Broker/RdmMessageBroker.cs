@@ -23,7 +23,7 @@ namespace Acn.Rdm.Broker
         /// </summary>
         Empty,
         /// <summary>
-        /// The parameter has been request but not yet recieved.
+        /// The parameter has been request but not yet received.
         /// </summary>
         Pending,
         /// <summary>
@@ -165,7 +165,7 @@ namespace Acn.Rdm.Broker
                     break;
             }
 
-            //When an overflow is recieved automatically request the rest of the packet.
+            //When an overflow is received automatically request the rest of the packet.
             if (packet.IsOverflow())
                 responsePacket = ProcessOverflow(packet);
 

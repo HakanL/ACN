@@ -14,7 +14,7 @@ namespace Acn.ArtNet.Packets
             RequestedUniverses = new List<byte>();
         }
 
-        public ArtTodRequestPacket(ArtNetRecieveData data)
+        public ArtTodRequestPacket(ArtNetReceiveData data)
             : base(data)
         {
             

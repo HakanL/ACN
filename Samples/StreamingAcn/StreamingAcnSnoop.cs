@@ -24,7 +24,7 @@ namespace StreamingAcn
     {
         private StreamingAcnSocket socket = new StreamingAcnSocket(Guid.NewGuid(), "Streaming ACN Snoop");
         private DmxStreamer dmxOutput;
-        private DmxUniverseData recieveData = new DmxUniverseData();
+        private DmxUniverseData receiveData = new DmxUniverseData();
 
         private RdmNetEndPointExplorer acnPortExplorer;
 
@@ -79,11 +79,11 @@ namespace StreamingAcn
 
             for (int n = 1; n <= 512; n++)
             {
-                ChannelCell recieveCell = new ChannelCell(n, recieveData);
-                recieveCell.Width = 60;
-                recieveCell.Margin = new Padding(3);
+                ChannelCell receiveCell = new ChannelCell(n, receiveData);
+                receiveCell.Width = 60;
+                receiveCell.Margin = new Padding(3);
 
-                channelArea.Controls.Add(recieveCell);
+                channelArea.Controls.Add(receiveCell);
 
                 ChannelCell cell = new ChannelCell(n, sendData);
                 cell.Width = 60;
@@ -227,7 +227,7 @@ namespace StreamingAcn
             StreamingAcnDmxPacket dmxPacket = e.Packet as StreamingAcnDmxPacket;
             if (dmxPacket != null)
             {
-                recieveData.DmxData = dmxPacket.Dmx.Data;
+                receiveData.DmxData = dmxPacket.Dmx.Data;
             }
         }
 
@@ -373,7 +373,7 @@ namespace StreamingAcn
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
             sendSelect.Checked = true;
-            recieveSelect.Checked = false;
+            receiveSelect.Checked = false;
 
             dataTabs.SelectedTab = sendTab;
             dmxOutput.Start();
@@ -382,9 +382,9 @@ namespace StreamingAcn
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
             sendSelect.Checked = false;
-            recieveSelect.Checked = true;
+            receiveSelect.Checked = true;
 
-            dataTabs.SelectedTab = recieveTab;
+            dataTabs.SelectedTab = receiveTab;
             dmxOutput.Stop();
         }
 

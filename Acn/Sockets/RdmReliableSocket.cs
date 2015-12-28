@@ -14,7 +14,7 @@ namespace Acn.Sockets
     /// will wrap an unreliable RDM socket.
     /// </summary>
     /// <remarks>
-    /// Ensures that a transaction is completed by re-requesting packets for which no response has been recieved.
+    /// Ensures that a transaction is completed by re-requesting packets for which no response has been received.
     /// </remarks>
     public class RdmReliableSocket:IRdmSocket,INotifyPropertyChanged,IDisposable
     {
@@ -139,17 +139,17 @@ namespace Acn.Sockets
             }
         }
 
-        private int packetsRecieved = 0;
+        private int packetsReceived = 0;
 
-        public int PacketsRecieved
+        public int PacketsReceived
         {
-            get { return packetsRecieved; }
+            get { return packetsReceived; }
             protected set
             {
-                if (packetsRecieved != value)
+                if (packetsReceived != value)
                 {
-                    packetsRecieved = value;
-                    RaisePropertyChanged("PacketsRecieved");
+                    packetsReceived = value;
+                    RaisePropertyChanged("PacketsReceived");
                 }
             }
         }
@@ -294,7 +294,7 @@ namespace Acn.Sockets
 
         void socket_NewRdmPacket(object sender, NewPacketEventArgs<RdmPacket> e)
         {
-            PacketsRecieved++;
+            PacketsReceived++;
 
             if (e.Packet.Header.TransactionNumber > 0)
             {

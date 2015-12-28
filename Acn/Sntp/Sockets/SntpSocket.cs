@@ -98,7 +98,7 @@ namespace Acn.Sntp.Sockets
         private DateTime? lastPacket = null;
 
         /// <summary>
-        /// Gets or sets the last packet recieve time.
+        /// Gets or sets the last packet receive time.
         /// (This is a generall socket time not NTP related)
         /// </summary>
         /// <value>
@@ -133,20 +133,20 @@ namespace Acn.Sntp.Sockets
             Bind(localEndPoint);
             PortOpen = true;
 
-            StartRecieve();
+            StartReceive();
         }
 
         /// <summary>
-        /// Starts the recieve.
+        /// Starts the receive.
         /// </summary>
-        public void StartRecieve()
+        public void StartReceive()
         {
             try
             {
                 EndPoint remotePort = new IPEndPoint(IPAddress.Any, Port);
-                MemoryStream recieveState = new MemoryStream(NtpData.NTPDataLength);
-                recieveState.SetLength(NtpData.NTPDataLength);
-                BeginReceiveFrom(recieveState.GetBuffer(), 0, (int)recieveState.Length, SocketFlags.None, ref remotePort, new AsyncCallback(OnRecieve), recieveState);
+                MemoryStream receiveState = new MemoryStream(NtpData.NTPDataLength);
+                receiveState.SetLength(NtpData.NTPDataLength);
+                BeginReceiveFrom(receiveState.GetBuffer(), 0, (int)receiveState.Length, SocketFlags.None, ref remotePort, new AsyncCallback(OnReceive), receiveState);
             }
             catch (Exception ex)
             {
@@ -155,10 +155,10 @@ namespace Acn.Sntp.Sockets
         }
 
         /// <summary>
-        /// Called when a packet is recieved.
+        /// Called when a packet is received.
         /// </summary>
         /// <param name="state">The state.</param>
-        private void OnRecieve(IAsyncResult state)
+        private void OnReceive(IAsyncResult state)
         {
             EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
@@ -166,9 +166,9 @@ namespace Acn.Sntp.Sockets
             {
                 try
                 {
-                    MemoryStream recieveState = (MemoryStream)(state.AsyncState);
+                    MemoryStream receiveState = (MemoryStream)(state.AsyncState);
 
-                    if (recieveState != null)
+                    if (receiveState != null)
                     {
                         EndReceiveFrom(state, ref remoteEndPoint);
 
@@ -178,9 +178,9 @@ namespace Acn.Sntp.Sockets
                         {
 
                             //Read the Header
-                            NtpData packet = NtpData.ReadPacket(recieveState);
+                            NtpData packet = NtpData.ReadPacket(receiveState);
 
-                            NewPacketEventArgs args = new NewPacketEventArgs(packet) { RecievedTime = (DateTime)LastPacket };
+                            NewPacketEventArgs args = new NewPacketEventArgs(packet) { ReceivedTime = (DateTime)LastPacket };
                             args.SourceEndPoint = (IPEndPoint) remoteEndPoint;
 
                             NewPacket(this, args);
@@ -193,8 +193,8 @@ namespace Acn.Sntp.Sockets
                 }
                 finally
                 {
-                    //Attempt to recieve another packet.
-                    StartRecieve();
+                    //Attempt to receive another packet.
+                    StartReceive();
                 }
             }
         }

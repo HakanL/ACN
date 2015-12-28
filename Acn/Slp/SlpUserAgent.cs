@@ -228,7 +228,7 @@ namespace Acn.Slp
         }
 
         /// <summary>
-        /// Occurs when a reply to an attribute request is recieved.
+        /// Occurs when a reply to an attribute request is received.
         /// </summary>
         public event EventHandler<AttributeReplyEventArgs> AttributeReply;
 

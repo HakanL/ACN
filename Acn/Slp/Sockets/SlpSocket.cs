@@ -70,7 +70,7 @@ namespace Acn.Slp.Sockets
             JoinMulticastGroup();
             PortOpen = true;
 
-            StartRecieve();
+            StartReceive();
         }
 
         private void JoinMulticastGroup()
@@ -85,14 +85,14 @@ namespace Acn.Slp.Sockets
             SetSocketOption(SocketOptionLevel.IP, SocketOptionName.AddMembership, new MulticastOption(MulticastGroup,((IPEndPoint)LocalEndPoint).Address));
         }
 
-        public void StartRecieve()
+        public void StartReceive()
         {
             try
             {
                 EndPoint remotePort = new IPEndPoint(IPAddress.Any, Port);
-                MemoryStream recieveState = new MemoryStream(SlpPacket.MaxSize);
-                recieveState.SetLength(SlpPacket.MaxSize);
-                BeginReceiveFrom(recieveState.GetBuffer(), 0, (int)recieveState.Length, SocketFlags.None, ref remotePort, new AsyncCallback(OnRecieve), recieveState);
+                MemoryStream receiveState = new MemoryStream(SlpPacket.MaxSize);
+                receiveState.SetLength(SlpPacket.MaxSize);
+                BeginReceiveFrom(receiveState.GetBuffer(), 0, (int)receiveState.Length, SocketFlags.None, ref remotePort, new AsyncCallback(OnReceive), receiveState);
             }
             catch (Exception ex)
             {
@@ -100,7 +100,7 @@ namespace Acn.Slp.Sockets
             }
         }
 
-        private void OnRecieve(IAsyncResult state)
+        private void OnReceive(IAsyncResult state)
         {
             EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
@@ -108,9 +108,9 @@ namespace Acn.Slp.Sockets
             {
                 try
                 {
-                    MemoryStream recieveState = (MemoryStream)(state.AsyncState);
+                    MemoryStream receiveState = (MemoryStream)(state.AsyncState);
 
-                    if (recieveState != null)
+                    if (receiveState != null)
                     {
                         EndReceiveFrom(state, ref remoteEndPoint);
 
@@ -118,7 +118,7 @@ namespace Acn.Slp.Sockets
 
                         if (NewPacket != null)
                         {
-                            SlpBinaryReader dataReader = new SlpBinaryReader(recieveState);
+                            SlpBinaryReader dataReader = new SlpBinaryReader(receiveState);
 
                             //Read the Header
                             SlpPacket packet = SlpPacket.ReadPacket(dataReader);
@@ -136,8 +136,8 @@ namespace Acn.Slp.Sockets
                 }
                 finally
                 {
-                    //Attempt to recieve another packet.
-                    StartRecieve();
+                    //Attempt to receive another packet.
+                    StartReceive();
                 }
             }
         }

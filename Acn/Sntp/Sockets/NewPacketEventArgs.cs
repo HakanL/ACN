@@ -65,12 +65,12 @@ namespace Acn.Sntp.Sockets
         }
 
         /// <summary>
-        /// Gets or sets the recieved time.
+        /// Gets or sets the received time.
         /// </summary>
         /// <value>
-        /// The recieved time.
+        /// The received time.
         /// </value>
-        public DateTime RecievedTime { get; set; }
+        public DateTime ReceivedTime { get; set; }
 
     }
 }

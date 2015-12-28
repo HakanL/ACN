@@ -138,7 +138,7 @@ namespace Acn.Helpers
         /// Called when an update is recived.
         /// </summary>
         /// <param name="updateId">The update id.</param>
-        internal void UpdateRecieved(int updateId)
+        internal void UpdateReceived(int updateId)
         {
             LastUpdateId = updateId;
             MissedUpdates = 0;

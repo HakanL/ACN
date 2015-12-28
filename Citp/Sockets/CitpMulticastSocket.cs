@@ -70,7 +70,7 @@ namespace Citp.Sockets
             JoinMulticastGroup(localEndPoint);            
             PortOpen = true;
 
-            StartRecieve();
+            StartReceive();
         }
 
         private void JoinMulticastGroup(IPEndPoint localEndPoint)
@@ -93,14 +93,14 @@ namespace Citp.Sockets
             }
         }
 
-        public void StartRecieve()
+        public void StartReceive()
         {
             try
             {
                 EndPoint localPort = new IPEndPoint(IPAddress.Any, Port);
-                CitpRecieveData recieveState = new CitpRecieveData();
-                recieveState.SetLength(recieveState.Capacity);
-                BeginReceiveFrom(recieveState.GetBuffer(), 0, recieveState.ReadNibble, SocketFlags.None, ref localPort, new AsyncCallback(OnRecieve), recieveState);
+                CitpReceiveData receiveState = new CitpReceiveData();
+                receiveState.SetLength(receiveState.Capacity);
+                BeginReceiveFrom(receiveState.GetBuffer(), 0, receiveState.ReadNibble, SocketFlags.None, ref localPort, new AsyncCallback(OnReceive), receiveState);
             }
             catch (Exception ex)
             {
@@ -108,7 +108,7 @@ namespace Citp.Sockets
             }
         }
 
-        private void OnRecieve(IAsyncResult state)
+        private void OnReceive(IAsyncResult state)
         {
             CitpPacket newPacket;
             EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
@@ -117,20 +117,20 @@ namespace Citp.Sockets
             {
                 try
                 {
-                    CitpRecieveData recieveState = (CitpRecieveData)(state.AsyncState);
+                    CitpReceiveData receiveState = (CitpReceiveData)(state.AsyncState);
 
-                    if (recieveState != null)
+                    if (receiveState != null)
                     {
-                        recieveState.SetLength(EndReceiveFrom(state, ref remoteEndPoint));
+                        receiveState.SetLength(EndReceiveFrom(state, ref remoteEndPoint));
 
-                        //Protect against UDP loopback where we recieve our own packets.
-                        if (LocalEndPoint != remoteEndPoint && recieveState.Valid)
+                        //Protect against UDP loopback where we receive our own packets.
+                        if (LocalEndPoint != remoteEndPoint && receiveState.Valid)
                         {
                             LastPacket = DateTime.Now;
 
                             if (NewPacket != null)
                             {
-                                if (CitpPacketBuilder.TryBuild(recieveState, out newPacket))
+                                if (CitpPacketBuilder.TryBuild(receiveState, out newPacket))
                                 {
                                     NewPacket(this, new CitpNewPacketEventArgs((IPEndPoint) LocalEndPoint ,(IPEndPoint) remoteEndPoint,newPacket));
                                 }
@@ -144,8 +144,8 @@ namespace Citp.Sockets
                 }
                 finally
                 {
-                    //Attempt to recieve another packet.
-                    StartRecieve();
+                    //Attempt to receive another packet.
+                    StartReceive();
                 }
             }
         }

@@ -23,7 +23,7 @@ namespace Acn.ArtNet.Packets
         {
         }
 
-        public ArtPollReplyPacket(ArtNetRecieveData data)
+        public ArtPollReplyPacket(ArtNetReceiveData data)
             : base(data)
         {
             

@@ -525,7 +525,7 @@ namespace Acn.Helpers
 
                     device.Endpoint = e.Address;
                     device.DiscoveryAgents.Add(sender as SlpUserAgent);
-                    device.UpdateRecieved(e.RequestId);
+                    device.UpdateReceived(e.RequestId);
                 }
 
                 RequestAttributes(device);

@@ -23,14 +23,14 @@ namespace GlitchDetector
 
         public string IpAddress { get; set; }
 
-        private DmxUniverse recieveData = null;
+        private DmxUniverse receiveData = null;
 
         void socket_NewPacket(object sender, NewPacketEventArgs<StreamingAcnDmxPacket> e)
         {
             StreamingAcnDmxPacket dmxPacket = e.Packet as StreamingAcnDmxPacket;
             if (dmxPacket != null)
             {
-                recieveData.SetDmx(dmxPacket.Dmx.Data);
+                receiveData.SetDmx(dmxPacket.Dmx.Data);
             }
         }
         Timer labelingTimer;
@@ -44,8 +44,8 @@ namespace GlitchDetector
 
             socket.JoinDmxUniverse(Universe);
 
-            recieveData = new DmxUniverse(Universe);
-            recieveData.DmxDataChanged += universe_DmxDataChanged;
+            receiveData = new DmxUniverse(Universe);
+            receiveData.DmxDataChanged += universe_DmxDataChanged;
 
             startTime = DateTime.UtcNow;
             labelingTimer = new Timer(new TimerCallback((o) =>
@@ -66,7 +66,7 @@ namespace GlitchDetector
         void universe_DmxDataChanged(object sender, EventArgs e)
         {
             byte? oldValue = lastValue;
-            lastValue = recieveData.DmxData[Channel];
+            lastValue = receiveData.DmxData[Channel];
 
             if(oldValue == null)
             {

@@ -32,7 +32,7 @@
             this.dataTabs = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.portGrid = new System.Windows.Forms.DataGridView();
-            this.recieveTab = new System.Windows.Forms.TabPage();
+            this.receiveTab = new System.Windows.Forms.TabPage();
             this.channelArea = new System.Windows.Forms.FlowLayoutPanel();
             this.sendTab = new System.Windows.Forms.TabPage();
             this.sendChannelArea = new System.Windows.Forms.FlowLayoutPanel();
@@ -41,7 +41,7 @@
             this.levelZero = new System.Windows.Forms.Button();
             this.levelFull = new System.Windows.Forms.Button();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.recieveSelect = new System.Windows.Forms.ToolStripButton();
+            this.receiveSelect = new System.Windows.Forms.ToolStripButton();
             this.sendSelect = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.networkCardSelect = new System.Windows.Forms.ToolStripComboBox();
@@ -51,7 +51,7 @@
             this.dataTabs.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.portGrid)).BeginInit();
-            this.recieveTab.SuspendLayout();
+            this.receiveTab.SuspendLayout();
             this.sendTab.SuspendLayout();
             this.levelGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.levelBar)).BeginInit();
@@ -61,7 +61,7 @@
             // dataTabs
             // 
             this.dataTabs.Controls.Add(this.tabPage1);
-            this.dataTabs.Controls.Add(this.recieveTab);
+            this.dataTabs.Controls.Add(this.receiveTab);
             this.dataTabs.Controls.Add(this.sendTab);
             this.dataTabs.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataTabs.Location = new System.Drawing.Point(0, 38);
@@ -91,16 +91,16 @@
             this.portGrid.TabIndex = 0;
             this.portGrid.CellBeginEdit += new System.Windows.Forms.DataGridViewCellCancelEventHandler(this.portGrid_CellBeginEdit);
             // 
-            // recieveTab
+            // receiveTab
             // 
-            this.recieveTab.Controls.Add(this.channelArea);
-            this.recieveTab.Location = new System.Drawing.Point(4, 22);
-            this.recieveTab.Name = "recieveTab";
-            this.recieveTab.Padding = new System.Windows.Forms.Padding(3);
-            this.recieveTab.Size = new System.Drawing.Size(739, 370);
-            this.recieveTab.TabIndex = 0;
-            this.recieveTab.Text = "Recieve";
-            this.recieveTab.UseVisualStyleBackColor = true;
+            this.receiveTab.Controls.Add(this.channelArea);
+            this.receiveTab.Location = new System.Drawing.Point(4, 22);
+            this.receiveTab.Name = "receiveTab";
+            this.receiveTab.Padding = new System.Windows.Forms.Padding(3);
+            this.receiveTab.Size = new System.Drawing.Size(739, 370);
+            this.receiveTab.TabIndex = 0;
+            this.receiveTab.Text = "Receive";
+            this.receiveTab.UseVisualStyleBackColor = true;
             // 
             // channelArea
             // 
@@ -185,7 +185,7 @@
             // 
             this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.recieveSelect,
+            this.receiveSelect,
             this.sendSelect,
             this.toolStripSeparator1,
             this.networkCardSelect,
@@ -198,17 +198,17 @@
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // recieveSelect
+            // receiveSelect
             // 
-            this.recieveSelect.Checked = true;
-            this.recieveSelect.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.recieveSelect.Image = ((System.Drawing.Image)(resources.GetObject("recieveSelect.Image")));
-            this.recieveSelect.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.recieveSelect.Name = "recieveSelect";
-            this.recieveSelect.Size = new System.Drawing.Size(51, 35);
-            this.recieveSelect.Text = "Recieve";
-            this.recieveSelect.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.recieveSelect.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.receiveSelect.Checked = true;
+            this.receiveSelect.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.receiveSelect.Image = ((System.Drawing.Image)(resources.GetObject("receiveSelect.Image")));
+            this.receiveSelect.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.receiveSelect.Name = "receiveSelect";
+            this.receiveSelect.Size = new System.Drawing.Size(51, 35);
+            this.receiveSelect.Text = "Receive";
+            this.receiveSelect.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.receiveSelect.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // sendSelect
             // 
@@ -268,7 +268,7 @@
             this.dataTabs.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.portGrid)).EndInit();
-            this.recieveTab.ResumeLayout(false);
+            this.receiveTab.ResumeLayout(false);
             this.sendTab.ResumeLayout(false);
             this.levelGroup.ResumeLayout(false);
             this.levelGroup.PerformLayout();
@@ -283,7 +283,7 @@
         #endregion
 
         private System.Windows.Forms.TabControl dataTabs;
-        private System.Windows.Forms.TabPage recieveTab;
+        private System.Windows.Forms.TabPage receiveTab;
         private System.Windows.Forms.TabPage sendTab;
         private System.Windows.Forms.FlowLayoutPanel channelArea;
         private System.Windows.Forms.ToolStrip toolStrip1;
@@ -295,7 +295,7 @@
         private System.Windows.Forms.TrackBar levelBar;
         private System.Windows.Forms.Button levelZero;
         private System.Windows.Forms.Button levelFull;
-        private System.Windows.Forms.ToolStripButton recieveSelect;
+        private System.Windows.Forms.ToolStripButton receiveSelect;
         private System.Windows.Forms.ToolStripButton sendSelect;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.TabPage tabPage1;

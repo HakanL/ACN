@@ -193,7 +193,7 @@ namespace Acn.Sntp
             data.RootDispersion = 0;
             data.RootDelay = 0;
             data.ReferenceID = "LOCL";
-            data.ReceiveTimestamp = packetInfo.RecievedTime;
+            data.ReceiveTimestamp = packetInfo.ReceivedTime;
             data.CopyTransmitToOriginate();
             data.TransmitTimestamp = DateTime.UtcNow;
             socket.Send(packetInfo.SourceEndPoint, data);

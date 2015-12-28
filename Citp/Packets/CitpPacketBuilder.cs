@@ -16,7 +16,7 @@ namespace Citp.Packets
 {
     public class CitpPacketBuilder
     {
-        internal static bool TryBuild(CitpRecieveData data,out CitpPacket packet)
+        internal static bool TryBuild(CitpReceiveData data,out CitpPacket packet)
         {
             CitpHeader header = new CitpHeader(string.Empty);
             packet = header;
@@ -79,7 +79,7 @@ namespace Citp.Packets
             return packet != null;
         }
 
-        private static CitpPacket BuildPInf(CitpRecieveData data)
+        private static CitpPacket BuildPInf(CitpReceiveData data)
         {
             CitpPInfHeader header = new CitpPInfHeader();
             header.ReadData(data.GetReader());
@@ -96,7 +96,7 @@ namespace Citp.Packets
 
         }
 
-        private static CitpPacket BuildFPtc(CitpRecieveData data)
+        private static CitpPacket BuildFPtc(CitpReceiveData data)
         {
             FPtcHeader header = new FPtcHeader(string.Empty);
             header.ReadData(data.GetReader());
@@ -121,7 +121,7 @@ namespace Citp.Packets
             return packet;
         }
 
-        private static CitpPacket BuildFSel(CitpRecieveData data)
+        private static CitpPacket BuildFSel(CitpReceiveData data)
         {
             FSelHeader header = new FSelHeader(string.Empty);
             header.ReadData(data.GetReader());
@@ -143,7 +143,7 @@ namespace Citp.Packets
             return packet;
         }
 
-        private static CitpPacket BuildSDmx(CitpRecieveData data)
+        private static CitpPacket BuildSDmx(CitpReceiveData data)
         {
             SDmxHeader header = new SDmxHeader(string.Empty);
             header.ReadData(data.GetReader());
@@ -171,7 +171,7 @@ namespace Citp.Packets
             return packet;
         }
 
-        private static CitpPacket BuildMsex(CitpRecieveData data)
+        private static CitpPacket BuildMsex(CitpReceiveData data)
         {
             CitpMsexHeader header = new CitpMsexHeader();
             header.ReadData(data.GetReader());
@@ -223,7 +223,7 @@ namespace Citp.Packets
 
         }
 
-        private static CitpPacket BuildCaEx(CitpRecieveData data)
+        private static CitpPacket BuildCaEx(CitpReceiveData data)
         {
             CaExHeader header = new CaExHeader(0x0);
             header.ReadData(data.GetReader());

@@ -99,16 +99,16 @@ namespace Acn.ArtNet.Sockets
             SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1);
             PortOpen = true;
 
-            StartRecieve();
+            StartReceive();
         }
 
-        public void StartRecieve()
+        public void StartReceive()
         {
             try
             {
                 EndPoint localPort = new IPEndPoint(IPAddress.Any, Port);
-                ArtNetRecieveData recieveState = new ArtNetRecieveData();
-                BeginReceiveFrom(recieveState.buffer, 0, recieveState.bufferSize, SocketFlags.None, ref localPort, new AsyncCallback(OnRecieve), recieveState);
+                ArtNetReceiveData receiveState = new ArtNetReceiveData();
+                BeginReceiveFrom(receiveState.buffer, 0, receiveState.bufferSize, SocketFlags.None, ref localPort, new AsyncCallback(OnReceive), receiveState);
             }
             catch (Exception ex)
             {
@@ -116,7 +116,7 @@ namespace Acn.ArtNet.Sockets
             }
         }
 
-        private void OnRecieve(IAsyncResult state)
+        private void OnReceive(IAsyncResult state)
         {
             EndPoint remoteEndPoint = new IPEndPoint(IPAddress.Any, 0);
 
@@ -124,18 +124,18 @@ namespace Acn.ArtNet.Sockets
             {
                 try
                 {
-                    ArtNetRecieveData recieveState = (ArtNetRecieveData)(state.AsyncState);
+                    ArtNetReceiveData receiveState = (ArtNetReceiveData)(state.AsyncState);
 
-                    if (recieveState != null)
+                    if (receiveState != null)
                     {
-                        recieveState.DataLength = EndReceiveFrom(state, ref remoteEndPoint);
+                        receiveState.DataLength = EndReceiveFrom(state, ref remoteEndPoint);
 
-                        //Protect against UDP loopback where we recieve our own packets.
-                        if (LocalEndPoint != remoteEndPoint && recieveState.Valid)
+                        //Protect against UDP loopback where we receive our own packets.
+                        if (LocalEndPoint != remoteEndPoint && receiveState.Valid)
                         {
                             LastPacket = DateTime.Now;
 
-                            ProcessPacket((IPEndPoint)remoteEndPoint, ArtNetPacket.Create(recieveState));
+                            ProcessPacket((IPEndPoint)remoteEndPoint, ArtNetPacket.Create(receiveState));
                         }
                     }
                 }
@@ -145,8 +145,8 @@ namespace Acn.ArtNet.Sockets
                 }
                 finally
                 {
-                    //Attempt to recieve another packet.
-                    StartRecieve();
+                    //Attempt to receive another packet.
+                    StartReceive();
                 }
             }
         }

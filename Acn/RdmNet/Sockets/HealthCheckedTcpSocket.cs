@@ -36,7 +36,7 @@ namespace Acn.RdmNet.Sockets
         public override void Open(IPEndPoint localEndPoint)
         {
             PortOpen = true;
-            StartRecieve(socket, null);            
+            StartReceive(socket, null);            
             
             if(Healthy)
                 HeartbeatEnabled = true;

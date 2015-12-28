@@ -15,7 +15,7 @@ namespace Acn.ArtNet.Packets
             RdmVersion = 1;
         }
 
-        public ArtRdmSubPacket(ArtNetRecieveData data)
+        public ArtRdmSubPacket(ArtNetReceiveData data)
             : base(data)
         {
 

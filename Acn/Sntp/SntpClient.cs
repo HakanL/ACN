@@ -182,7 +182,7 @@ namespace Acn.Sntp
                 // Resolve server address
                 var hostaddresses = Dns.GetHostAddresses(TimeServer);
                 IPEndPoint EPhost = new IPEndPoint(hostaddresses.First(a => a.AddressFamily == AddressFamily.InterNetwork), Port);
-                NtpData recieveData;
+                NtpData receiveData;
                 List<NtpData> replies;
 
                 //Connect the time server
@@ -214,12 +214,12 @@ namespace Acn.Sntp
                     //Find the median value
                     replies = replies.OrderBy(r => r.LocalClockOffset).ToList();
 
-                    recieveData = replies[replies.Count / 2];
+                    receiveData = replies[replies.Count / 2];
                 }
                 // Update system time
                 if (UpdateSystemTime)
                 {
-                    SetTime(recieveData.NewTime);
+                    SetTime(receiveData.NewTime);
                 }
 
                 return replies;
@@ -246,13 +246,13 @@ namespace Acn.Sntp
             byte[] sendBytes = sendData.ToArray();
             timeSocket.Send(sendBytes, sendBytes.Length);
 
-            NtpData recieveData = new NtpData(timeSocket.Receive(ref host));
-            recieveData.ReceptionTimestamp = DateTime.Now;
-            if (!recieveData.IsResponseValid())
+            NtpData receiveData = new NtpData(timeSocket.Receive(ref host));
+            receiveData.ReceptionTimestamp = DateTime.Now;
+            if (!receiveData.IsResponseValid())
             {
                 throw new Exception("Invalid response from " + TimeServer);
             }
-            return recieveData;
+            return receiveData;
         }
 
 
