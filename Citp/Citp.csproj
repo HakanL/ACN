@@ -117,7 +117,7 @@
     <Compile Include="Sockets\CitpClient.cs" />
     <Compile Include="Sockets\CitpMulticastSocket.cs" />
     <Compile Include="Sockets\CitpNewPacketEventArgs.cs" />
-    <Compile Include="Sockets\CitpRecieveData.cs" />
+    <Compile Include="Sockets\CitpReceiveData.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -145,7 +145,7 @@
     <Compile Include="ArtNet\IO\ArtNetBinaryWriter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ArtNet\IO\ArtNetRecieveData.cs" />
+    <Compile Include="ArtNet\IO\ArtNetReceiveData.cs" />
     <Compile Include="ArtNet\Packets\ArtNetDmxPacket.cs" />
     <Compile Include="ArtNet\Packets\ArtNetPacket.cs" />
     <Compile Include="ArtNet\Packets\ArtPollPacket.cs" />
