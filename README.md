@@ -31,7 +31,7 @@ This project is under continuous development and further protocols will be added
 | Remote Device Management (RDM)                         | ANSI E1.20                     | Complete                   |
 
 ## Contribute
-The orginal project remains in active development ([as of October 2015](http://acn.codeplex.com/SourceControl/list/changesets)). You may wish to contribute there instead of on this project. 
+The original project remains in active development ([as of October 2015](http://acn.codeplex.com/SourceControl/list/changesets)). You may wish to contribute there instead of on this project.
 
 ## Credits
 | Known Name                                                                | Role                           |
