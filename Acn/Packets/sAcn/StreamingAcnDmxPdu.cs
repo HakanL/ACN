@@ -10,7 +10,7 @@ namespace Acn.Packets.sAcn
     /// <summary>
     /// The DMX data PDU for streaming ACN.
     /// </summary>
-    public class StreamingAcnDmxPdu:DmpSetProperty
+    public class StreamingAcnDmxPdu : DmpSetProperty
     {
         private byte startCode = byte.MaxValue;
 
@@ -26,6 +26,22 @@ namespace Acn.Packets.sAcn
         {
             get { return startCode; }
             set { startCode = value; }
+        }
+
+        /// <summary>
+        /// Gets the length of the property.
+        /// </summary>
+        /// <value>
+        /// The length of the property.
+        /// </value>
+        public override short PropertyLength
+        {
+            get
+            {
+                if (StartCode != 0xFF)
+                    return (short)(base.PropertyLength + 1);
+                return base.PropertyLength;
+            }
         }
 
         /// <summary>

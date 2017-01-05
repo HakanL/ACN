@@ -83,7 +83,7 @@ namespace Acn
                 {
                     if (universe.AliveTime > 0 || universe.KeepAliveTime > 36)
                     {
-                        socket.SendDmx(universe.Universe, universe.DmxData, (byte) Priority);
+                        socket.SendDmx(universe.Universe, 0, universe.DmxData, (byte) Priority);
 
                         universe.KeepAliveTime = 0;
                         universe.AliveTime = Math.Max(0, universe.AliveTime-1);
