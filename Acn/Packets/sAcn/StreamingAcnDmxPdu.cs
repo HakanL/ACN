@@ -34,15 +34,15 @@ namespace Acn.Packets.sAcn
         /// <value>
         /// The length of the property.
         /// </value>
-        public override short PropertyLength
-        {
-            get
-            {
-                if (StartCode != 0xFF)
-                    return (short)(base.PropertyLength + 1);
-                return base.PropertyLength;
-            }
-        }
+        //public override short PropertyLength
+        //{
+        //    get
+        //    {
+        //        if (StartCode != 0xFF)
+        //            return (short)(base.PropertyLength + 1);
+        //        return base.PropertyLength;
+        //    }
+        //}
 
         /// <summary>
         /// Writes the content.
@@ -50,8 +50,12 @@ namespace Acn.Packets.sAcn
         protected override void WriteContent(IO.AcnBinaryWriter data)
         {
             if (StartCode != 0xFF)
+            {
                 data.Write(StartCode);
-            base.WriteContent(data);
+                data.Write(PropertyData, 1, PropertyData.Length - 1);
+            }
+            else
+                base.WriteContent(data);
         }
     }
 }
