@@ -8,7 +8,7 @@ using System.Threading;
 using Acn.Sockets;
 using Acn.Packets.sAcn;
 using System.Globalization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Diagnostics;
 
 namespace Acn.TestTools
 {
@@ -22,15 +22,15 @@ namespace Acn.TestTools
 
         public static void Record(Guid senderId, List<int> universes)
         {
-            try 
-	        {	        
-	            recordedPackets = new List<StreamingAcnDmxPacket>();
+            try
+            {
+                recordedPackets = new List<StreamingAcnDmxPacket>();
                 ProcessDmxInput(senderId, universes, 2500, (packet) => { recordedPackets.Add(packet); });
-	        }
-	        catch (TimeoutException)
-	        {
-		        //This will ocurr if no DMX is on any of the universe.
-	        }
+            }
+            catch (TimeoutException)
+            {
+                //This will ocurr if no DMX is on any of the universe.
+            }
         }
 
         public static void Stop()
@@ -75,7 +75,8 @@ namespace Acn.TestTools
         public static byte[] CaptureDmx(int universe)
         {
             byte[] capturedDmx = null;
-            ProcessInput(Guid.Empty,universe, 2500 ,(packet) => {
+            ProcessInput(Guid.Empty, universe, 2500, (packet) =>
+            {
                 capturedDmx = packet.Dmx.Data;
             });
 
@@ -86,17 +87,18 @@ namespace Acn.TestTools
 
         public static void LevelEqual(int universe, int address, byte level)
         {
-            ProcessInput(Guid.Empty,universe, 2500, (packet) =>
+            ProcessInput(Guid.Empty, universe, 2500, (packet) =>
             {
-                Assert.AreEqual(level, packet.Dmx.Data[address], string.Format("DMX levels do not match for universe {0} address {1}.", universe,address));
+                Debug.Assert(level == packet.Dmx.Data[address], string.Format("DMX levels do not match for universe {0} address {1}.", universe, address));
             });
         }
 
 
         public static void UniverseEqual(int universe, params byte[] levels)
         {
-            ProcessInput(Guid.Empty, universe, 2500 ,(packet) => {
-                Assert.IsTrue(packet.Dmx.Data.SequenceEqual(levels),string.Format("DMX values do not match for universe {0}.",universe));
+            ProcessInput(Guid.Empty, universe, 2500, (packet) =>
+            {
+                Debug.Assert(packet.Dmx.Data.SequenceEqual(levels), string.Format("DMX values do not match for universe {0}.", universe));
             });
         }
 
@@ -109,7 +111,7 @@ namespace Acn.TestTools
 
         private static void ProcessInput(Guid senderId, int universe, int timeout, Action<StreamingAcnDmxPacket> handler)
         {
-            ProcessInput(senderId, new List<int>() { universe },timeout,handler);
+            ProcessInput(senderId, new List<int>() { universe }, timeout, handler);
         }
 
         private static void ProcessInput(Guid senderId, List<int> universes, int timeout, Action<StreamingAcnDmxPacket> handler)
@@ -131,13 +133,13 @@ namespace Acn.TestTools
                 acnSocket.UnhandledException += (object sender, UnhandledExceptionEventArgs e)
                 =>
                 {
-                    socketException = (Exception) e.ExceptionObject;
+                    socketException = (Exception)e.ExceptionObject;
                     waitForDMX.Set();
                 };
 
                 acnSocket.NewPacket += (object sender, NewPacketEventArgs<Acn.Packets.sAcn.StreamingAcnDmxPacket> e) =>
                 {
-                    if((senderId == Guid.Empty || senderId == e.Packet.Root.SenderId) &&
+                    if ((senderId == Guid.Empty || senderId == e.Packet.Root.SenderId) &&
                         (universes.Contains(e.Packet.Framing.Universe)))
                     {
                         try
@@ -145,22 +147,22 @@ namespace Acn.TestTools
                             handler(e.Packet);
 
                             universes.Remove(e.Packet.Framing.Universe);
-                            if(universes.Count == 0)
+                            if (universes.Count == 0)
                                 waitForDMX.Set();
                         }
                         finally
                         {
-                            if(universes.Count == 0)
+                            if (universes.Count == 0)
                                 acnSocket.Close();
-                        }                       
-                    }                
+                        }
+                    }
                 };
                 acnSocket.Open(IPAddress.Any);
-                foreach(int universe in universes)
+                foreach (int universe in universes)
                     acnSocket.JoinDmxUniverse(universe);
 
                 if (!waitForDMX.WaitOne(timeout))
-                    throw new TimeoutException(string.Format("A timeout ocurred whil waiting for DMX on universe {0}.", string.Join(",",universes)));
+                    throw new TimeoutException(string.Format("A timeout ocurred whil waiting for DMX on universe {0}.", string.Join(",", universes)));
 
                 if (socketException != null)
                     throw socketException;
