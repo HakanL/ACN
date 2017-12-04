@@ -18,16 +18,24 @@ namespace Acn.Sockets
 
         #region Setup and Initialisation
         /// <summary>
+        /// Initializes a new instance of the <see cref="StreamingAcnSocket"/> which will multicast using standardized ports and addresses.
+        /// </summary>
+        /// <param name="sourceId">A <see cref="Guid"/> representing this source.</param>
+        /// <param name="sourceName">A descriptive name for this endpoint.</param>
+        public StreamingAcnSocket(Guid sourceId, string sourceName)
+            : this(sourceId, sourceName, IPAddress.None)
+        {
+        }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="StreamingAcnSocket"/> which will unicast to a specified <see cref="IPAddress"/> on the standard ACN-SDT multicast port (5568).
         /// </summary>
         /// <param name="sourceId">A <see cref="Guid"/> representing this source.</param>
         /// <param name="sourceName">A descriptive name for this endpoint.</param>
         /// <param name="unicastDestination">The <see cref="IPAddress"/> of a remote endpoint to which packets should be directly sent.</param>
         public StreamingAcnSocket(Guid sourceId, string sourceName, IPAddress unicastDestination)
-            : base(sourceId)
+            : this(sourceId, sourceName, unicastDestination == IPAddress.None || unicastDestination == null ? null :  new IPEndPoint(unicastDestination, 5568))
         {
-            UnicastDestination = new IPEndPoint(unicastDestination, 5568);
-            Constructor(sourceName);
         }
 
         /// <summary>
@@ -40,29 +48,12 @@ namespace Acn.Sockets
             : base(sourceId)
         {
             UnicastDestination = unicastDestination;
-            Constructor(sourceName);
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="StreamingAcnSocket"/> which will multicast using standardized ports and addresses.
-        /// </summary>
-        /// <param name="sourceId">A <see cref="Guid"/> representing this source.</param>
-        /// <param name="sourceName">A descriptive name for this endpoint.</param>
-        public StreamingAcnSocket(Guid sourceId, string sourceName)
-            : base(sourceId)
-        {
-            Constructor(sourceName);
-        }
-
-        private void Constructor(string sourceName)
-        {
             if (sourceName.Length > 64)
                 throw new ArgumentException("The source name must be no longer than 64 characters.");
 
             SourceName = sourceName;
             RegisterProtocolFilter(this);
         }
-
         #endregion
 
         #region Information
