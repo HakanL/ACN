@@ -308,7 +308,7 @@ namespace Acn.ArtNet.Packets
             Oem = data.ReadNetwork16();
             UbeaVersion = data.ReadByte();
             Status = (PollReplyStatus)data.ReadByte();
-            EstaCode = data.ReadNetwork16();
+            EstaCode = data.ReadInt16();
             ShortName = data.ReadNetworkString(18);
             LongName = data.ReadNetworkString(64);
             NodeReport = data.ReadNetworkString(64);
