@@ -402,7 +402,7 @@ namespace Acn.Slp
             return true;
         }
 
-        private void SendServiceReply(IPEndPoint target, short transactionId)
+        public void SendServiceReply(IPEndPoint target, short transactionId)
         {
             ServiceReplyPacket reply = new ServiceReplyPacket();
             FillHeader(reply.Header, transactionId);
@@ -410,7 +410,7 @@ namespace Acn.Slp
             socket.Send(target, reply);
         }
 
-        private void SendAttributeReply(IPEndPoint target, short transactionId)
+        public void SendAttributeReply(IPEndPoint target, short transactionId)
         {
             AttributeReplyPacket reply = new AttributeReplyPacket();
             FillHeader(reply.Header, transactionId);
