@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt.Addresses
 {
-    public class IPv4Address:SdtAddress
+    public class IPv4Address:StdAddress
     {
         public IPv4Address()
             : base(SdtAddressTypes.IPv4)

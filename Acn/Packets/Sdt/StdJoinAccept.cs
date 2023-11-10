@@ -1,22 +1,23 @@
 ﻿using Acn.IO;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdJoinAccept:AcnPdu
+    public class StdJoinAccept: SdtPdu
     {
         public StdJoinAccept()
-            : base((int) StdVectors.JoinAccept,1)
+            : base(StdVectors.JoinAccept)
         {
         }
 
         #region Packet Contents
 
-        public Guid LeaderId { get; set; }
+        public Guid ComponentId { get; set; }
 
         public short ChannelNumber { get; set; }
 
@@ -30,18 +31,18 @@ namespace Acn.Packets.Sdt
 
         #region Read/Write
 
-        protected override void ReadData(AcnBinaryReader data)
+        public override void ReadData(AcnBinaryReader data)
         {
-            LeaderId = new Guid(data.ReadBytes(16));
+            ComponentId = NetworkGuid.FromPacket(data.ReadBytes(16));
             ChannelNumber = data.ReadOctet2();
             MemberId = data.ReadOctet2();
             ReliableSequenceNumber = data.ReadOctet4();
             ReciprocalChannel = data.ReadOctet2();
         }
 
-        protected override void WriteData(AcnBinaryWriter data)
+        public override void WriteData(AcnBinaryWriter data)
         {
-            data.Write(LeaderId.ToByteArray());
+            data.Write(ComponentId.ToNetworkByteArray());
             data.WriteOctet(ChannelNumber);
             data.WriteOctet(MemberId);
             data.WriteOctet(ReliableSequenceNumber);

@@ -1,16 +1,17 @@
 ﻿using Acn.IO;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdLeaving: AcnPdu
+    public class StdLeaving: SdtPdu
     {
         public StdLeaving()
-            : base((int) StdVectors.Leaving,1)
+            : base(StdVectors.Leaving)
         {
         }
 
@@ -30,18 +31,18 @@ namespace Acn.Packets.Sdt
 
         #region Read/Write
 
-        protected override void ReadData(AcnBinaryReader data)
+        public override void ReadData(AcnBinaryReader data)
         {
-            LeaderId = new Guid(data.ReadBytes(16));
+            LeaderId = NetworkGuid.FromPacket(data.ReadBytes(16));
             ChannelNumber = data.ReadOctet2();
             MemberId = data.ReadOctet2();
             ReliableSequenceNumber = data.ReadOctet4();
             ReasonCode = (ReasonCodes)data.ReadByte();
         }
 
-        protected override void WriteData(AcnBinaryWriter data)
+        public override void WriteData(AcnBinaryWriter data)
         {
-            data.Write(LeaderId.ToByteArray());
+            data.Write(LeaderId.ToNetworkByteArray());
             data.WriteOctet(ChannelNumber);
             data.WriteOctet(MemberId);
             data.WriteOctet(ReliableSequenceNumber);

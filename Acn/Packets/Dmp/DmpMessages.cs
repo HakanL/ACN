@@ -12,6 +12,7 @@ namespace Acn.Packets.Dmp
         GetPropertyReply = 3,
         Event = 4,
         Subscribe = 7,
-        UnSubscribe = 8 
+        UnSubscribe = 8 ,
+        SubscribeAccept = 12
     }
 }

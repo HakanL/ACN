@@ -1,16 +1,17 @@
 ﻿using Acn.IO;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdConnectAccept : AcnPdu
+    public class StdConnectAccept : SdtPdu
     {
         public StdConnectAccept()
-            : base((int) StdVectors.ConnectAccept,1)
+            : base(StdVectors.ConnectAccept)
         {
         }
 
@@ -22,12 +23,12 @@ namespace Acn.Packets.Sdt
 
         #region Read/Write
 
-        protected override void ReadData(AcnBinaryReader data)
+        public override void ReadData(AcnBinaryReader data)
         {
             ProtocolId = data.ReadOctet4();
         }
 
-        protected override void WriteData(AcnBinaryWriter data)
+        public override void WriteData(AcnBinaryWriter data)
         {
             data.WriteOctet(ProtocolId);
         }

@@ -38,16 +38,20 @@ namespace Acn.Packets.sAcn
 
         protected override void ReadData(AcnBinaryReader data)
         {
-            Framing.ReadPdu(data);
-            Dmx.ReadPdu(data);
+            Framing.Header.ReadPdu(data);
+            Framing.ReadData(data);
+            Dmx.Header.ReadPdu(data);
+            Dmx.ReadData(data);
         }
 
         protected override void WriteData(AcnBinaryWriter data)
         {
-            Framing.WritePdu(data);
-            Dmx.WritePdu(data);
-            Dmx.WriteLength(data);
-            Framing.WriteLength(data);
+            Framing.Header.WritePdu(data);
+            Framing.WriteData(data);
+            dmx.Header.WritePdu(data);
+            Dmx.WriteData(data);
+            Dmx.Header.WriteLength(data);
+            Framing.Header.WriteLength(data);
         }
 
         #endregion

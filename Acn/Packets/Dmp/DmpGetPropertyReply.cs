@@ -6,35 +6,31 @@ using Acn.IO;
 
 namespace Acn.Packets.Dmp
 {
-    public class DmpGetPropertyReply : AcnPdu
+    public class DmpGetPropertyReply : DmpPdu
     {
         public DmpGetPropertyReply()
-            : base((int) DmpMessages.GetPropertyReply,1)
+            : base(DmpMessages.GetPropertyReply)
         {
         }
 
         #region Packet Contents
 
-        private byte addressType = 0;
-
-        public byte AddressType
-        {
-            get { return addressType; }
-            set { addressType = value; }
-        }
+        public byte[] Data { get; set; } = new byte[] { 0 };
 
         #endregion
 
         #region Read/Write
 
-        protected override void ReadData(AcnBinaryReader data)
+        public override void ReadData(AcnBinaryReader data)
         {
-            AddressType = data.ReadByte();
+            base.ReadData(data);
+            Data = data.ReadBytes(base.Header.Length - 6); //kind of... TODO: actually work this out programatically, as it depends on flags
         }
 
-        protected override void WriteData(AcnBinaryWriter data)
+        public override void WriteData(AcnBinaryWriter data)
         {
-            data.Write(AddressType);
+            base.WriteData(data);
+            data.Write(Data);
         }
 
         #endregion

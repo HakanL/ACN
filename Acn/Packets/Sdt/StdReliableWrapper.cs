@@ -1,21 +1,24 @@
 ﻿using Acn.IO;
+using Acn.Packets.Dmp;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdReliableWrapper:AcnPdu
+    public class StdReliableWrapper : SdtPdu
     {
         public StdReliableWrapper()
-            : base((int) StdVectors.ReliableWrapper,1)
+            : base(StdVectors.ReliableWrapper)
         {
         }
 
-        protected StdReliableWrapper(int vector)
-            : base(vector, 1)
+        protected StdReliableWrapper(StdVectors vector)
+            : base(vector)
         {
         }
 
@@ -35,13 +38,15 @@ namespace Acn.Packets.Sdt
 
         public short MAKThreshold { get; set; }
 
-        public AcnPdu Pdu { get; set; }
+        public SdtWrappedHeader WrappedHeader { get; set; }
+
+        public List<AcnPdu> Pdu { get; set; } = new List<AcnPdu>();
 
         #endregion
 
         #region Read/Write
 
-        protected override void ReadData(AcnBinaryReader data)
+        public override void ReadData(AcnBinaryReader data)
         {
             ChannelNumber = data.ReadOctet2();
             TotalSequenceNumber = data.ReadOctet4();
@@ -50,10 +55,46 @@ namespace Acn.Packets.Sdt
             FirstMemberToAck = data.ReadOctet2();
             LastMemberToAck = data.ReadOctet2();
             MAKThreshold = data.ReadOctet2();
-            throw new NotImplementedException();
+            //if (rootLayer.Length < data.BaseStream.Position + 6)
+            //    return;
+            WrappedHeader = new SdtWrappedHeader();
+            WrappedHeader.ReadData(data);
+
+            AcnPduHeader header = new AcnPduHeader(0, 1);
+            header.ReadPdu(data);
+            bool first = true;
+            switch (WrappedHeader.ProtocolId)
+            {
+                case ProtocolIds.SDT:
+                    do
+                    {
+                        SdtPdu tempPdu = SdtPduFactory.Build(header);
+                        tempPdu.Header = header;
+                        if (!first) tempPdu.Header.ReadFlags(data);
+                        tempPdu.ReadData(data);
+                        Pdu.Add(tempPdu);
+                        first = false;
+                    } while (data.BaseStream.Position < rootLayer.Length + 16);
+                    break;
+                case ProtocolIds.DMP:
+                    do
+                    {
+                        DmpPdu tempPdu = DmpPdu.Create(header);
+                        tempPdu.Header = header;
+                        if (!first)
+                        {
+                            tempPdu.AddressType = ((DmpPdu)Pdu[0]).AddressType;
+                            tempPdu.Header.ReadFlags(data);
+                        }
+                        tempPdu.ReadData(data);
+                        Pdu.Add(tempPdu);
+                        first = false;
+                    } while (data.BaseStream.Position < rootLayer.Length + 16);
+                    break;
+            }
         }
 
-        protected override void WriteData(AcnBinaryWriter data)
+        public override void WriteData(AcnBinaryWriter data)
         {
             data.WriteOctet(ChannelNumber);
             data.WriteOctet(TotalSequenceNumber);
@@ -62,7 +103,14 @@ namespace Acn.Packets.Sdt
             data.WriteOctet(FirstMemberToAck);
             data.WriteOctet(LastMemberToAck);
             data.WriteOctet(MAKThreshold);
-            throw new NotImplementedException();
+            WrappedHeader.WriteData(data);
+            foreach (AcnPdu pdu in Pdu)
+            {
+                pdu.Header.WritePdu(data);
+                pdu.WriteData(data);
+                pdu.Header.WriteLength(data);
+            }
+            WrappedHeader.WriteLength(data);
         }
 
         #endregion

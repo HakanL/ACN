@@ -8,45 +8,33 @@ using Acn.Rdm;
 
 namespace Acn.Packets.RdmNet
 {
-    public class RdmNetStatusPdu:AcnPdu
+    public class RdmNetStatusPdu : AcnPdu
     {
         public RdmNetStatusPdu()
-            : base((int)DmxStartCodes.RDM)
         {
+            Header = new AcnPduHeader((int)DmxStartCodes.RDM);
         }
 
         #region PDU Contents
 
-        private short statusCode = 0;
+        public short StatusCode { get; set; } = 0;
 
-        public short StatusCode
-        {
-            get { return statusCode; }
-            set { statusCode = value; }
-        }
-
-        private string statusMessage = string.Empty;
-
-        public string StatusMessage
-        {
-            get { return statusMessage; }
-            set { statusMessage = value; }
-        }
+        public string StatusMessage { get; set; } = string.Empty;
 
         #endregion
 
         #region Read and Write
 
-        protected override void ReadData(AcnBinaryReader data)
+        public override void ReadData(AcnBinaryReader data)
         {
             StatusCode = data.ReadOctet2();
-            StatusMessage = data.ReadUtf8String(Length - 4);
+            StatusMessage = data.ReadUtf8String(Header.Length - 4);
         }
 
-        protected override void WriteData(AcnBinaryWriter data)
+        public override void WriteData(AcnBinaryWriter data)
         {
             data.WriteOctet(StatusCode);
-            data.WriteUtf8String(StatusMessage,StatusMessage.Length);
+            data.WriteUtf8String(StatusMessage, StatusMessage.Length);
         }
 
         #endregion

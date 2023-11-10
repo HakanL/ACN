@@ -1,16 +1,17 @@
 ﻿using Acn.IO;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdNak : AcnPdu
+    public class StdNak : SdtPdu
     {
         public StdNak()
-            : base((int) StdVectors.Nak,1)
+            : base(StdVectors.Nak)
         {
         }
 
@@ -32,9 +33,9 @@ namespace Acn.Packets.Sdt
 
         #region Read/Write
 
-        protected override void ReadData(AcnBinaryReader data)
+       public override void ReadData(AcnBinaryReader data)
         {
-            LeaderId = new Guid(data.ReadBytes(16));            
+            LeaderId = NetworkGuid.FromPacket(data.ReadBytes(16));            
             ChannelNumber = data.ReadOctet2();
             MemberId = data.ReadOctet2();
             ReliableSequenceNumber = data.ReadOctet4();
@@ -42,9 +43,9 @@ namespace Acn.Packets.Sdt
             LastMissedSequence = data.ReadOctet4();
         }
 
-        protected override void WriteData(AcnBinaryWriter data)
+        public override void WriteData(AcnBinaryWriter data)
         {
-            data.Write(LeaderId.ToByteArray());            
+            data.Write(LeaderId.ToNetworkByteArray());            
             data.WriteOctet(ChannelNumber);
             data.WriteOctet(MemberId);
             data.WriteOctet(ReliableSequenceNumber);

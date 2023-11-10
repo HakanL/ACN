@@ -10,8 +10,8 @@ namespace Acn.Packets.sAcn
     public class StreamingAcnFramingPdu : AcnPdu
     {
         public StreamingAcnFramingPdu()
-            : base((int) ProtocolIds.DMP)
         {
+            Header = new AcnPduHeader((int)ProtocolIds.DMP);
         }
 
         #region PDU Contents
@@ -71,7 +71,7 @@ namespace Acn.Packets.sAcn
 
         #region Read and Write
 
-        protected override void ReadData(AcnBinaryReader data)
+        public override void ReadData(AcnBinaryReader data)
         {
             SourceName = data.ReadUtf8String(64);
             Priority = data.ReadByte();
@@ -81,7 +81,7 @@ namespace Acn.Packets.sAcn
             Universe = data.ReadOctet2();
         }
 
-        protected override void WriteData(AcnBinaryWriter data)
+        public override void WriteData(AcnBinaryWriter data)
         {
             data.WriteUtf8String(SourceName,64);
             data.Write(Priority);

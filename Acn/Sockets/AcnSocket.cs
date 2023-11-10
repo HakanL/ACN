@@ -12,7 +12,7 @@ using System.Threading;
 
 namespace Acn.Sockets
 {
-    public class AcnSocket:Socket
+    public class AcnSocket : Socket
     {
         /// <summary>
         /// Winsock ioctl code which will disable ICMP errors from being propagated to a UDP socket.
@@ -21,7 +21,7 @@ namespace Acn.Sockets
         /// </summary>
         public const int SIO_UDP_CONNRESET = -1744830452;
 
-        public event UnhandledExceptionEventHandler UnhandledException;
+        //public event UnhandledExceptionEventHandler UnhandledException;
 
         #region Setup and Initialisation
 
@@ -106,8 +106,8 @@ namespace Acn.Sockets
             //    for the socket with this ioctl call.
             try
             {
-            byte[] byteTrue = new byte[4] {0,0,0, 1};
-            IOControl(SIO_UDP_CONNRESET, byteTrue, null);
+                byte[] byteTrue = new byte[4] { 0, 0, 0, 1 };
+                IOControl(SIO_UDP_CONNRESET, byteTrue, null);
             }
             catch (SocketException)
             {
@@ -118,34 +118,36 @@ namespace Acn.Sockets
             Bind(localEndPoint);
 
             //Multi-cast socket settings
-            MulticastLoopback = true;            
+            MulticastLoopback = true;
             SetSocketOption(SocketOptionLevel.IP, SocketOptionName.MulticastTimeToLive, 1);        //Only join local LAN group.
 
             PortOpen = true;
 
-            StartReceive(this,null);
+            StartReceive(this, null);
         }
 
         public void StartReceive(Socket socket, MemoryStream buffer)
         {
-            try
-            {
-                EndPoint localPort = new IPEndPoint(IPAddress.Any, 0);
+            //try
+            //{
+            EndPoint localPort = new IPEndPoint(IPAddress.Any, 0);
 
-                if (buffer == null)
-                {
-                    buffer = new MemoryStream(65536);
-                    buffer.SetLength(65536);
-                }
-                buffer.Seek(0, SeekOrigin.Begin);
-
-                Tuple<Socket, MemoryStream> receiveState = new Tuple<Socket, MemoryStream>(socket, buffer);
-                socket.BeginReceiveFrom(buffer.GetBuffer(), 0, (int)buffer.Length, SocketFlags.None, ref localPort, new AsyncCallback(OnReceive), receiveState);
-            }
-            catch (Exception ex)
+            if (buffer == null)
             {
-                RaiseUnhandledException(new ApplicationException("An error ocurred while trying to start recieving ACN.", ex));
+                buffer = new MemoryStream(65536);
             }
+            buffer.Seek(0, SeekOrigin.Begin);
+
+            buffer.SetLength(0);
+            buffer.SetLength(65536);
+
+            Tuple<Socket, MemoryStream> receiveState = new Tuple<Socket, MemoryStream>(socket, buffer);
+            socket.BeginReceiveFrom(buffer.GetBuffer(), 0, (int)buffer.Length, SocketFlags.None, ref localPort, new AsyncCallback(OnReceive), receiveState);
+            //}
+            //catch (Exception ex)
+            //{
+            //    RaiseUnhandledException(new ApplicationException("An error ocurred while trying to start recieving ACN.", ex));
+            //}
         }
 
         private void OnReceive(IAsyncResult state)
@@ -182,14 +184,14 @@ namespace Acn.Sockets
                 {
                     Close();
                 }
-                catch (Exception ex)
-                {
-                    RaiseUnhandledException(ex);
-                }
+                //catch (Exception ex)
+                //{
+                //    RaiseUnhandledException(ex);
+                //}
                 finally
                 {
                     //Attempt to receive another packet.
-                    if(PortOpen)
+                    if (PortOpen)
                         StartReceive(receiveState.Item1, receiveState.Item2);
                 }
             }
@@ -203,7 +205,7 @@ namespace Acn.Sockets
             IProtocolFilter filter;
             if (filters.TryGetValue(rootLayer.ProtocolId, out filter))
             {
-                filter.ProcessPacket(source,rootLayer, data);
+                filter.ProcessPacket(source, rootLayer, data);
             }
         }
 
@@ -225,12 +227,12 @@ namespace Acn.Sockets
             BeginSendTo(data.GetBuffer(), 0, (int)data.Length, SocketFlags.None, destination, null, null);
         }
 
-        protected void RaiseUnhandledException(Exception ex)
-        {
-            if (UnhandledException == null)
-                throw new ApplicationException("Exception is unhandled by user code. Please subscribe to the UnhandledException event.",ex);
-            UnhandledException(this, new UnhandledExceptionEventArgs((object)ex, false));
-        }
+        //protected void RaiseUnhandledException(Exception ex)
+        //{
+        //    if (UnhandledException == null)
+        //        throw new ApplicationException("Exception is unhandled by user code. Please subscribe to the UnhandledException event.",ex);
+        //    UnhandledException(this, new UnhandledExceptionEventArgs((object)ex, false));
+        //}
 
         /// <summary>
         /// Closes the <see cref="T:System.Net.Sockets.Socket" /> connection and releases all associated resources.

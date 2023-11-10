@@ -99,7 +99,7 @@ namespace Acn.RdmNet.Sockets
                         else
                         {
                             HealthCheckedTcpSocket socket = new HealthCheckedTcpSocket(clientSocket, RdmSourceId, SenderId, SourceName);
-                            socket.UnhandledException += socket_UnhandledException;
+                            //socket.UnhandledException += socket_UnhandledException;
                             socket.Open(new IPEndPoint(IPAddress.Any, 0));
                             AliveTcpSocket = socket;
                         }
@@ -117,10 +117,10 @@ namespace Acn.RdmNet.Sockets
         /// </summary>
         /// <param name="sender">The source of the event.</param>
         /// <param name="e">The <see cref="UnhandledExceptionEventArgs"/> instance containing the event data.</param>
-        void socket_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-        {
-            RaiseUnhandledException((Exception)e.ExceptionObject);
-        }
+        //void socket_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        //{
+        //    RaiseUnhandledException((Exception)e.ExceptionObject);
+        //}
 
 
         #endregion

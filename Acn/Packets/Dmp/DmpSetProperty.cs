@@ -6,10 +6,10 @@ using Acn.IO;
 
 namespace Acn.Packets.Dmp
 {
-    public class DmpSetProperty : AcnPdu
+    public class DmpSetProperty : DmpPdu
     {
         public DmpSetProperty()
-            : base((int) DmpMessages.SetProperty,1)
+            : base(DmpMessages.SetProperty)
         {
         }
 
@@ -62,7 +62,7 @@ namespace Acn.Packets.Dmp
 
         #region Read/Write
 
-        protected override void ReadData(AcnBinaryReader data)
+        public override void ReadData(AcnBinaryReader data)
         {
             AddressType = data.ReadByte();
             FirstPropertyAddress = data.ReadOctet2();
@@ -72,7 +72,7 @@ namespace Acn.Packets.Dmp
             PropertyData = data.ReadBytes(propertyLength);
         }
 
-        protected override void WriteData(AcnBinaryWriter data)
+        public override void WriteData(AcnBinaryWriter data)
         {
             data.Write(AddressType);
             data.WriteOctet(FirstPropertyAddress);

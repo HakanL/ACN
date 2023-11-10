@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Acn.Rdm.Packets.Net;
 using Acn.Packets.sAcn;
+using Acn.Packets.Sdt;
 
 namespace Acn
 {
@@ -14,6 +15,7 @@ namespace Acn
             //Port List
             RegisterPacketType((int)ProtocolIds.sACN, typeof(StreamingAcnDmxPacket));
             RegisterPacketType((int)ProtocolIds.RdmNet, typeof(RdmNetPacket));
+            RegisterPacketType((int)ProtocolIds.SDT, typeof(SdtPacket));    
         }
 
         private struct PacketKey

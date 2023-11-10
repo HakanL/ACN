@@ -10,7 +10,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Acn</RootNamespace>
     <AssemblyName>Acn</AssemblyName>
-    <TargetFrameworkVersion Condition=" '$(Configuration)' == 'Debug' or '$(Configuration)' == 'Release' ">v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -35,7 +34,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -136,6 +135,7 @@
       <Link>ProductVersion.cs</Link>
     </Compile>
     <Compile Include="AcnPdu.cs" />
+    <Compile Include="AcnPduHeader.cs" />
     <Compile Include="AcnRootLayer.cs" />
     <Compile Include="AcnPacket.cs" />
     <Compile Include="ArtNet\ArtNetOpCodes.cs" />
@@ -163,13 +163,18 @@
     <Compile Include="Helpers\SlpDeviceInformation.cs" />
     <Compile Include="Helpers\SlpDeviceManager.cs" />
     <Compile Include="InvalidPacketException.cs" />
+    <Compile Include="IO\GuidExtension.cs" />
     <Compile Include="IProtocolFilter.cs" />
+    <Compile Include="Packets\Dmp\DmpEvent.cs" />
     <Compile Include="Packets\Dmp\DmpGetProperty.cs" />
     <Compile Include="Packets\Dmp\DmpGetPropertyReply.cs" />
     <Compile Include="Packets\Dmp\DmpMessages.cs" />
+    <Compile Include="Packets\Dmp\DmpPdu.cs" />
     <Compile Include="Packets\Dmp\DmpSetProperty.cs" />
     <Compile Include="IO\AcnBinaryReader.cs" />
     <Compile Include="IO\AcnBinaryWriter.cs" />
+    <Compile Include="Packets\Dmp\DmpSubscribe.cs" />
+    <Compile Include="Packets\Dmp\DmpSubscribeAccept.cs" />
     <Compile Include="Packets\RdmNet\RdmNetHeartbeat.cs" />
     <Compile Include="Packets\RdmNet\RdmNetStatusPdu.cs" />
     <Compile Include="Packets\RdmNet\RdmNetStatusPacket.cs" />
@@ -186,6 +191,8 @@
     <Compile Include="Packets\Sdt\ChannelParameterBlock.cs" />
     <Compile Include="Packets\Sdt\ReasonCodes.cs" />
     <Compile Include="Packets\Sdt\Addresses\NullAddress.cs" />
+    <Compile Include="Packets\Sdt\SdtPacket.cs" />
+    <Compile Include="Packets\Sdt\SdtWrappedHeader.cs" />
     <Compile Include="Packets\Sdt\StdConnect.cs" />
     <Compile Include="Packets\Sdt\StdConnectAccept.cs" />
     <Compile Include="Packets\Sdt\StdConnectRefuse.cs" />
@@ -195,6 +202,8 @@
     <Compile Include="Packets\Sdt\StdGetSessions.cs" />
     <Compile Include="Packets\Sdt\StdAck.cs" />
     <Compile Include="Packets\Sdt\StdChannelParams.cs" />
+    <Compile Include="Packets\Sdt\SdtPdu.cs" />
+    <Compile Include="Packets\Sdt\SdtPduFactory.cs" />
     <Compile Include="Packets\Sdt\StdSessions.cs" />
     <Compile Include="Packets\Sdt\StdNak.cs" />
     <Compile Include="Packets\Sdt\StdLeaving.cs" />
@@ -335,6 +344,7 @@
     <Compile Include="Rdm\UId.cs" />
     <Compile Include="Packets\sAcn\StreamingAcnPacket.cs" />
     <Compile Include="Rdm\UnknownRdmPacketException.cs" />
+    <Compile Include="Sdt\SdtSession.cs" />
     <Compile Include="Slp\AttributeReplyEventArgs.cs" />
     <Compile Include="Slp\AuthenticationBlock.cs" />
     <Compile Include="Slp\DirectoryAgentInformation.cs" />
@@ -379,6 +389,7 @@
     <Compile Include="Sockets\RdmReliableSocket.cs" />
     <Compile Include="RdmNet\Sockets\RdmNetSocket.cs" />
     <Compile Include="Sockets\StreamingAcnSocket.cs" />
+    <Compile Include="Sdt\SdtServer.cs" />
     <Compile Include="TestTools\AcnListener.cs" />
     <Compile Include="TestTools\AssertDmx.cs" />
     <Compile Include="TFtp\TFTPServer.cs" />
@@ -406,6 +417,7 @@
   <ItemGroup>
     <None Include="AcnProjectKey.snk" />
   </ItemGroup>
+  <ItemGroup />
   <Import Condition=" '$(Configuration)' == 'Debug' or '$(Configuration)' == 'Release' " Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Condition=" '$(Configuration)' == 'AndroidDebug' or '$(Configuration)' == 'AndroidRelease' " Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <PropertyGroup>

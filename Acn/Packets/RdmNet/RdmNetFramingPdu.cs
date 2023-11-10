@@ -12,57 +12,44 @@ namespace Acn.Packets.RdmNet
         RdmNet = 1,
         Status = 2,
         Controller = 3,
-        ChangeNotification =4
+        ChangeNotification = 4
     }
 
-    public class RdmNetFramingPdu:AcnPdu
+    public class RdmNetFramingPdu : AcnPdu
     {
-        public RdmNetFramingPdu(RdmNetProtocolIds protocolId)
-            : base((int) protocolId)
+        public RdmNetFramingPdu()
         {
+            Header = new AcnPduHeader((int)RdmNetProtocolIds.RdmNet);
+        }
+
+        public RdmNetFramingPdu(RdmNetProtocolIds protocolId)
+        {
+            Header = new AcnPduHeader((int)protocolId);
         }
 
         #region PDU Contents
 
-        private string sourceName = string.Empty;
+        public string SourceName { get; set; } = string.Empty;
 
-        public string SourceName
-        {
-            get { return sourceName; }
-            set { sourceName = value; }
-        }
+        public int SequenceNumber { get; set; } = 0;
 
-        private int sequenceNumber = 0;
-
-        public int SequenceNumber
-        {
-            get { return sequenceNumber; }
-            set { sequenceNumber = value; }
-        }
-
-        private short endpointID = 0;
-
-        public short EndpointID
-        {
-            get { return endpointID; }
-            set { endpointID = value; }
-        }
+        public short EndpointID { get; set; } = 0;
 
         #endregion
 
         #region Read and Write
 
-        protected override void ReadData(AcnBinaryReader data)
+        public override void ReadData(AcnBinaryReader data)
         {
             SourceName = data.ReadUtf8String(64);
             SequenceNumber = data.ReadOctet4();
             EndpointID = data.ReadOctet2();
-            data.BaseStream.Seek(1, SeekOrigin.Current);            
+            data.BaseStream.Seek(1, SeekOrigin.Current);
         }
 
-        protected override void WriteData(AcnBinaryWriter data)
+        public override void WriteData(AcnBinaryWriter data)
         {
-            data.WriteUtf8String(SourceName,64);
+            data.WriteUtf8String(SourceName, 64);
             data.WriteOctet(SequenceNumber);
             data.WriteOctet(EndpointID);
             data.BaseStream.Seek(1, SeekOrigin.Current);

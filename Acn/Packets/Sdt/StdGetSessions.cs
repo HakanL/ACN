@@ -1,16 +1,17 @@
 ﻿using Acn.IO;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdGetSessions:AcnPdu
+    public class StdGetSessions: SdtPdu
     {
         public StdGetSessions()
-            : base((int) StdVectors.GetSessions,1)
+            : base(StdVectors.GetSessions)
         {
         }
 
@@ -22,14 +23,14 @@ namespace Acn.Packets.Sdt
 
         #region Read/Write
 
-        protected override void ReadData(AcnBinaryReader data)
+        public override void ReadData(AcnBinaryReader data)
         {
-            ComponentId = new Guid(data.ReadBytes(16));
+            ComponentId = NetworkGuid.FromPacket(data.ReadBytes(16));
         }
 
-        protected override void WriteData(AcnBinaryWriter data)
+        public override void WriteData(AcnBinaryWriter data)
         {
-            data.Write(ComponentId.ToByteArray());
+            data.Write(ComponentId.ToNetworkByteArray());
         }
 
         #endregion
