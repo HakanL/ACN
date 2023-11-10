@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt.Addresses
 {
-    public class NullAddress : StdAddress
+    public class NullAddress : SdtAddress
     {
         public NullAddress() : base(SdtAddressTypes.Null)
         {

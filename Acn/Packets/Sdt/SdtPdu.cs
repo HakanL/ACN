@@ -22,7 +22,7 @@ namespace Acn.Packets.Sdt
             Header = new AcnPduHeader((int)ProtocolIds.SDT, 1);
         }
 
-        public SdtPdu(StdVectors vector)
+        public SdtPdu(SdtVectors vector)
         {
             Header = new AcnPduHeader((int)vector, 1);
         }
