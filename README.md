@@ -20,7 +20,7 @@ This project is under continuous development and further protocols will be added
 | Protocol Name                                          | Standard                       | Implementation Status      |
 | -------------------------------------------------------|:------------------------------ |:--------------------------:|
 | Root Layer Protocol (RLP)                              | ANSI E1.17                     | Complete                   |
-| Session Data Transport Protocol (SDT)                  | ANSI E1.17                     | Not Implemented            |
+| Session Data Transport Protocol (SDT)                  | ANSI E1.17                     | Partial                    |
 | Service Location Protocol (SLP)                        | RFC 2609                       | Complete                   |
 | Simple Network Time Protocol (SNTP)                    | RFC 2030 ANSI E1.30-3 - 2009   | Complete                   |
 | Trivial File Transfer Protocol (TFTP)                  | RFC 1350                       | Not Implemented            |
@@ -29,9 +29,6 @@ This project is under continuous development and further protocols will be added
 | Streaming ACN (sACN)                                   | ANSI E1.31                     | Complete                   |
 | RDM Extension (RDMNet)                                 | ANSI E1.33                     | Complete                   |
 | Remote Device Management (RDM)                         | ANSI E1.20                     | Complete                   |
-
-## Contribute
-The original project remains in active development ([as of October 2015](http://acn.codeplex.com/SourceControl/list/changesets)). You may wish to contribute there instead of on this project.
 
 ## Credits
 | Known Name                                                                | Role                           |
@@ -42,3 +39,4 @@ The original project remains in active development ([as of October 2015](http://
 | [Mark Daniel](http://www.codeplex.com/site/users/view/MarkDaniel)         | CodePlex project developer     |
 | [Mike James](https://github.com/MikeCodesDotNet)                          | ArtNet Receive sample developer|
 | [Hakan Lindestaf](https://github.com/HakanL)                              | GitHub Maintainer / Forker     |
+| [Joel E.](https://github.com/joele89)                                     | SDT Contributor                |
