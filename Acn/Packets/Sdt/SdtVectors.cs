@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public enum StdVectors
+    public enum SdtVectors
     {
         ReliableWrapper = 1,
         UnreliableWrapper = 2,
@@ -22,7 +22,7 @@ namespace Acn.Packets.Sdt
         Disconnect = 12,
         Disconnecting = 13,
         Ack = 14,
-        Nak = 14,
+        Nak = 15,
         GetSessions = 16,
         Sessions = 17
     }

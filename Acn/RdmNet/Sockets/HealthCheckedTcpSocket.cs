@@ -128,17 +128,17 @@ namespace Acn.RdmNet.Sockets
 
         private void Heartbeat(object state)
         {
-            try 
-	        {	        
+         //   try 
+	        //{	        
 		        if(Healthy)
                     SendHeartbeat();
                 else
                     heartbeatTimer.Change(Timeout.Infinite, Timeout.Infinite);
-	        }
-	        catch (Exception ex)
-	        {
-                RaiseUnhandledException(ex);
-	        }            
+	        //}
+	        //catch (Exception ex)
+	        //{
+         //       RaiseUnhandledException(ex);
+	        //}            
         }
 
         public void SendHeartbeat()

@@ -8,11 +8,16 @@ using Acn.Rdm;
 
 namespace Acn.Packets.RdmNet
 {
-    public class RdmNetPdu:AcnPdu
+    public class RdmNetPdu : AcnPdu
     {
         public RdmNetPdu()
-            : base((int)DmxStartCodes.RDM,1)
         {
+            Header = new AcnPduHeader((int)DmxStartCodes.RDM);
+        }
+
+        public RdmNetPdu(DmxStartCodes vector)
+        {
+            Header = new AcnPduHeader((int)vector);
         }
 
         #region PDU Contents
@@ -29,14 +34,14 @@ namespace Acn.Packets.RdmNet
 
         #region Read and Write
 
-        protected override void ReadData(AcnBinaryReader data)
+        public override void ReadData(AcnBinaryReader data)
         {
-            RdmData = data.ReadBytes(Length - 3);
+            RdmData = data.ReadBytes(Header.Length - 3);
         }
 
-        protected override void WriteData(AcnBinaryWriter data)
+        public override void WriteData(AcnBinaryWriter data)
         {
-            if(RdmData != null)
+            if (RdmData != null)
                 data.Write(RdmData);
         }
 

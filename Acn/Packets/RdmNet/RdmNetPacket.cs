@@ -16,19 +16,9 @@ namespace Acn.Packets.sAcn
 
         #region Packet Contents
 
-        private RdmNetFramingPdu framing = new RdmNetFramingPdu(RdmNetProtocolIds.RdmNet);
+        public RdmNetFramingPdu Framing { get; private set; } = new RdmNetFramingPdu(RdmNetProtocolIds.RdmNet);
 
-        public RdmNetFramingPdu Framing
-        {
-            get { return framing; }
-        }
-
-        private RdmNetPdu rdmNet = new RdmNetPdu();
-
-        public RdmNetPdu RdmNet
-        {
-            get { return rdmNet; }
-        }
+        public RdmNetPdu RdmNet { get; private set; } = new RdmNetPdu();
 
         #endregion
 
@@ -36,16 +26,20 @@ namespace Acn.Packets.sAcn
 
         protected override void ReadData(AcnBinaryReader data)
         {
-            Framing.ReadPdu(data);
-            RdmNet.ReadPdu(data);
+            Framing.Header.ReadPdu(data);
+            Framing.ReadData(data);
+            RdmNet.Header.ReadPdu(data);
+            RdmNet.ReadData(data);
         }
 
         protected override void WriteData(AcnBinaryWriter data)
         {
-            Framing.WritePdu(data);
-            RdmNet.WritePdu(data);
-            RdmNet.WriteLength(data);
-            Framing.WriteLength(data);
+            Framing.Header.WritePdu(data);  
+            Framing.WriteData(data);
+            RdmNet.Header.WritePdu(data);
+            RdmNet.WriteData(data);
+            RdmNet.Header.WriteLength(data);
+            Framing.Header.WriteLength(data);
         }
 
         #endregion

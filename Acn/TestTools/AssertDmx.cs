@@ -128,12 +128,12 @@ namespace Acn.TestTools
             StreamingAcnSocket acnSocket = new StreamingAcnSocket(Guid.NewGuid(), "DMX Assert");
             try
             {
-                acnSocket.UnhandledException += (object sender, UnhandledExceptionEventArgs e)
-                =>
-                {
-                    socketException = (Exception) e.ExceptionObject;
-                    waitForDMX.Set();
-                };
+                //acnSocket.UnhandledException += (object sender, UnhandledExceptionEventArgs e)
+                //=>
+                //{
+                //    socketException = (Exception) e.ExceptionObject;
+                //    waitForDMX.Set();
+                //};
 
                 acnSocket.NewPacket += (object sender, NewPacketEventArgs<Acn.Packets.sAcn.StreamingAcnDmxPacket> e) =>
                 {

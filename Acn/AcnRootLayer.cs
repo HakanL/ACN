@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Acn.IO;
+//using Acn.IO.GuidExtension;
 
 namespace Acn
 {
@@ -63,7 +64,7 @@ namespace Acn
             ProtocolId = data.ReadOctet4();
 
             //Read CID            
-            SenderId = new Guid(data.ReadBytes(16));
+            SenderId = NetworkGuid.FromPacket(data.ReadBytes(16));
         }
 
         private long lengthPosition = 0;
@@ -89,7 +90,7 @@ namespace Acn
 
             data.WriteOctet((short) ((Flags << 12) + Length));
             data.WriteOctet(ProtocolId);
-            data.Write(SenderId.ToByteArray());
+            data.Write(SenderId.ToNetworkByteArray());
         }
 
         public void WriteLength(AcnBinaryWriter data)

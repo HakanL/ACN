@@ -1,16 +1,17 @@
 ﻿using Acn.IO;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdUnreliableWrapper:StdReliableWrapper
+    public class SdtUnreliableWrapper:SdtReliableWrapper
     {
-        public StdUnreliableWrapper()
-            : base((int) StdVectors.UnreliableWrapper)
+        public SdtUnreliableWrapper()
+            : base(SdtVectors.UnreliableWrapper)
         {
         }
 
@@ -20,12 +21,12 @@ namespace Acn.Packets.Sdt
 
         #region Read/Write
 
-        protected override void ReadData(AcnBinaryReader data)
+        public override void ReadData(AcnBinaryReader data)
         {
             base.ReadData(data);
         }
 
-        protected override void WriteData(AcnBinaryWriter data)
+        public override void WriteData(AcnBinaryWriter data)
         {
             base.WriteData(data);
         }

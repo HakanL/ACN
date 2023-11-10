@@ -2,21 +2,20 @@
 using Acn.Packets.Sdt.Addresses;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdJoin:AcnPdu
+    public class SdtJoin : SdtPdu
     {
-        public StdJoin()
-            : base((int) StdVectors.Join,1)
+        public SdtJoin()
+            : base(SdtVectors.Join)
         {
         }
-
         #region Packet Contents
-
         public Guid ComponentId { get; set; }
 
         public short MemberId { get; set; }
@@ -39,9 +38,9 @@ namespace Acn.Packets.Sdt
 
         #region Read/Write
 
-        protected override void ReadData(AcnBinaryReader data)
+        public override void ReadData(AcnBinaryReader data)
         {
-            ComponentId = new Guid(data.ReadBytes(16));
+            ComponentId = NetworkGuid.FromPacket(data.ReadBytes(16));
             MemberId = data.ReadOctet2();
             ChannelNumber = data.ReadOctet2();
             ReciprocalChannel = data.ReadOctet2();
@@ -52,9 +51,9 @@ namespace Acn.Packets.Sdt
             AdHocExpiry = data.ReadByte();
         }
 
-        protected override void WriteData(AcnBinaryWriter data)
+        public override void WriteData(AcnBinaryWriter data)
         {
-            data.Write(ComponentId.ToByteArray());
+            data.Write(ComponentId.ToNetworkByteArray());
             data.WriteOctet(MemberId);
             data.WriteOctet(ChannelNumber);
             data.WriteOctet(ReciprocalChannel);

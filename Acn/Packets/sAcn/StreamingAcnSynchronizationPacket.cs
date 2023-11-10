@@ -15,12 +15,7 @@ namespace Acn.Packets.sAcn
 
         #region Packet Contents
 
-        private StreamingAcnFramingPdu framing = new StreamingAcnFramingPdu();
-
-        public StreamingAcnFramingPdu Framing
-        {
-            get { return framing; }
-        }
+        public StreamingAcnFramingPdu Framing { get; } = new StreamingAcnFramingPdu();
 
         #endregion
 
@@ -28,13 +23,15 @@ namespace Acn.Packets.sAcn
 
         protected override void ReadData(AcnBinaryReader data)
         {
-            Framing.ReadPdu(data);
+            Framing.Header.ReadPdu(data);
+            Framing.ReadData(data);
         }
 
         protected override void WriteData(AcnBinaryWriter data)
         {
-            Framing.WritePdu(data);
-            Framing.WriteLength(data);
+            Framing.Header.WritePdu(data);
+            Framing.WriteData(data);
+            Framing.Header.WriteLength(data);
         }
 
         #endregion

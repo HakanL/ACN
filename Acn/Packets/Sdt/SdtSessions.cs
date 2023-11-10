@@ -1,33 +1,32 @@
 ﻿using Acn.IO;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdChannelParams : AcnPdu
+    public class SdtSessions : SdtPdu
     {
-        public StdChannelParams()
-            : base((int) StdVectors.ChannelParameters,1)
+        public SdtSessions()
+            : base(SdtVectors.Sessions)
         {
         }
 
         #region Packet Contents
-
-        public ChannelParameterBlock Channel { get; set; }
-
+        
         #endregion
 
         #region Read/Write
 
-        protected override void ReadData(AcnBinaryReader data)
+        public override void ReadData(AcnBinaryReader data)
         {
             throw new NotImplementedException();
         }
 
-        protected override void WriteData(AcnBinaryWriter data)
+        public override void WriteData(AcnBinaryWriter data)
         {
             throw new NotImplementedException();
         }
