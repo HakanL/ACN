@@ -56,7 +56,7 @@ namespace Acn.Sdt
             TxJoin();
         }
 
-        internal SdtSession(SdtServer sdtServer, IPEndPoint remoteClient, StdJoin joinRequest)
+        internal SdtSession(SdtServer sdtServer, IPEndPoint remoteClient, SdtJoin joinRequest)
         {
             this.sdtServer = sdtServer;
             this.remoteClient = remoteClient;
@@ -66,15 +66,15 @@ namespace Acn.Sdt
             RxJoin(joinRequest);
         }
 
-        internal void RxJoinAccept(StdJoinAccept joinAccept)
+        internal void RxJoinAccept(SdtJoinAccept joinAccept)
         {
             Debug.WriteLine("rx JoinAccept");
             TxAck(joinAccept.ReliableSequenceNumber);
         }
 
-        public void TxJoinAccept(StdJoin joinRequest, short reciprocalChannel)
+        public void TxJoinAccept(SdtJoin joinRequest, short reciprocalChannel)
         {
-            StdJoinAccept joinAccept = new StdJoinAccept();
+            SdtJoinAccept joinAccept = new SdtJoinAccept();
             joinAccept.ChannelNumber = joinRequest.ChannelNumber;
             joinAccept.ReciprocalChannel = reciprocalChannel;
 
@@ -90,7 +90,7 @@ namespace Acn.Sdt
         }
         public void TxJoin()
         {
-            StdJoin join = new StdJoin();
+            SdtJoin join = new SdtJoin();
 
             join.ChannelNumber = LocalChannel.ChannelNumber;
             join.ChannelParameterBlock = LocalChannel.ParameterBlock;
@@ -108,7 +108,7 @@ namespace Acn.Sdt
             sdtServer.SendPacket(join, remoteClient);
         }
 
-        public void RxJoin(StdJoin joinRequest)
+        public void RxJoin(SdtJoin joinRequest)
         {
             Debug.WriteLine("rx Join");
             TxJoinAccept(joinRequest, LocalChannel.ChannelNumber);
@@ -118,13 +118,13 @@ namespace Acn.Sdt
 
         Dictionary<int, SdtPdu> pendingACK = new Dictionary<int, SdtPdu>();
 
-        public void RxAck(StdReliableWrapper wrapper)
+        public void RxAck(SdtReliableWrapper wrapper)
         {
             Debug.WriteLine("rx ACK");
             int ACKID = wrapper.ReliableSequenceNumber;
             if (!pendingACK.ContainsKey(ACKID))
                 return;
-            if (pendingACK[ACKID].Header.Vector == (int)StdVectors.JoinAccept)
+            if (pendingACK[ACKID].Header.Vector == (int)SdtVectors.JoinAccept)
                 RaiseChannelEstablished();
             if (pendingACK.ContainsKey(ACKID))
                 pendingACK.Remove(ACKID);
@@ -138,10 +138,10 @@ namespace Acn.Sdt
 
         private void TxAck(int SequenceNumber)
         {
-            StdAck ack = new StdAck();
+            SdtAck ack = new SdtAck();
             ack.ReliableSequenceNumber = RemoteChannel.SequenceNumber++;
 
-            StdUnreliableWrapper wrapper = new StdUnreliableWrapper();
+            SdtUnreliableWrapper wrapper = new SdtUnreliableWrapper();
             wrapper.ReliableSequenceNumber = SequenceNumber;
             wrapper.OldestAvailableWrapper = SequenceNumber;
             wrapper.TotalSequenceNumber = SequenceNumber + 1;
@@ -159,13 +159,13 @@ namespace Acn.Sdt
         }
 
 
-        public void RxLeave(StdReliableWrapper wrapper)
+        public void RxLeave(SdtReliableWrapper wrapper)
         {
             Debug.WriteLine("rx Leave");
             TxAck(wrapper.ReliableSequenceNumber);
         }
 
-        public void RxConnect(StdReliableWrapper wrapper, StdConnect reqPdu)
+        public void RxConnect(SdtReliableWrapper wrapper, SdtConnect reqPdu)
         {
             Debug.WriteLine("rx Connect");
             TxConnectAccept(reqPdu);
@@ -174,9 +174,9 @@ namespace Acn.Sdt
         public void TxConnect()
         {
 
-            StdConnect connect = new StdConnect((int)ProtocolIds.DMP);
+            SdtConnect connect = new SdtConnect((int)ProtocolIds.DMP);
 
-            StdReliableWrapper wrapper = new StdReliableWrapper();
+            SdtReliableWrapper wrapper = new SdtReliableWrapper();
             wrapper.Pdu.Add(connect);
 
             wrapper.ReliableSequenceNumber = LocalChannel.SequenceNumber;
@@ -195,12 +195,12 @@ namespace Acn.Sdt
             sdtServer.SendPacket(wrapper, remoteClient);
         }
 
-        public void TxConnectAccept(StdConnect reqPdu)
+        public void TxConnectAccept(SdtConnect reqPdu)
         {
-            StdConnectAccept accept = new StdConnectAccept();
+            SdtConnectAccept accept = new SdtConnectAccept();
             accept.ProtocolId = reqPdu.ProtocolId;
 
-            StdReliableWrapper wrapper = new StdReliableWrapper();
+            SdtReliableWrapper wrapper = new SdtReliableWrapper();
             wrapper.Pdu.Add(accept);
 
             wrapper.ReliableSequenceNumber = LocalChannel.SequenceNumber;
@@ -232,7 +232,7 @@ namespace Acn.Sdt
         public delegate void GetPropertyEventHandler(SdtSession sender, int Address, ref byte[] Value);
         public event GetPropertyEventHandler GetProperty;
 
-        public void RxDmpGetProperty(StdReliableWrapper wrapper)
+        public void RxDmpGetProperty(SdtReliableWrapper wrapper)
         {
             Debug.WriteLine("rx GetProperties");
             List<DmpGetPropertyReply> retPdu = new List<DmpGetPropertyReply>();
@@ -271,7 +271,7 @@ namespace Acn.Sdt
 
         public void TxDmpGetPropertyReply(List<DmpGetPropertyReply> retPdu)
         {
-            StdReliableWrapper wrapper = new StdReliableWrapper();
+            SdtReliableWrapper wrapper = new SdtReliableWrapper();
             wrapper.Pdu.AddRange(retPdu.ToArray());
 
             wrapper.ReliableSequenceNumber = LocalChannel.SequenceNumber;
@@ -294,7 +294,7 @@ namespace Acn.Sdt
         public delegate void PropertySubscribeEventHandler(SdtSession sender, int Address);
         public event PropertySubscribeEventHandler PropertySubscribe;
 
-        public void RxDmpSubscribe(StdReliableWrapper wrapper)
+        public void RxDmpSubscribe(SdtReliableWrapper wrapper)
         {
             Debug.WriteLine("rx Subscribe");
             List<DmpSubscribeAccept> retPdu = new List<DmpSubscribeAccept>();
@@ -321,7 +321,7 @@ namespace Acn.Sdt
 
         public void TxDmpSubscribeAccept(List<DmpSubscribeAccept> retPdu)
         {
-            StdReliableWrapper wrapper = new StdReliableWrapper();
+            SdtReliableWrapper wrapper = new SdtReliableWrapper();
             wrapper.Pdu.AddRange(retPdu.ToArray());
 
             wrapper.ReliableSequenceNumber = LocalChannel.SequenceNumber;
@@ -348,7 +348,7 @@ namespace Acn.Sdt
             pdu.AddressType = AddressFlags.Size_4Octets;
             pdu.ActualAddress = Address;
 
-            StdUnreliableWrapper wrapper = new StdUnreliableWrapper();
+            SdtUnreliableWrapper wrapper = new SdtUnreliableWrapper();
             wrapper.Pdu.Add(pdu);
 
             wrapper.ReliableSequenceNumber = LocalChannel.SequenceNumber;
@@ -369,7 +369,7 @@ namespace Acn.Sdt
                 sdtServer.SendPacket(wrapper, remoteClient);
         }
 
-        public void RxHeartbeat(StdReliableWrapper wrapper)
+        public void RxHeartbeat(SdtReliableWrapper wrapper)
         {
             Debug.WriteLine("rx Heartbeat");
             TxHeartbeatAck(wrapper.ReliableSequenceNumber);
@@ -377,11 +377,11 @@ namespace Acn.Sdt
 
         public void TxHeartbeatAck(int SequenceNumber)
         {
-            StdAck ack = new StdAck();
+            SdtAck ack = new SdtAck();
             ack.ReliableSequenceNumber = SequenceNumber;
             RemoteChannel.SequenceNumber = SequenceNumber;
 
-            StdUnreliableWrapper wrapper = new StdUnreliableWrapper();
+            SdtUnreliableWrapper wrapper = new SdtUnreliableWrapper();
             wrapper.ReliableSequenceNumber = LocalChannel.SequenceNumber;
             wrapper.OldestAvailableWrapper = LocalChannel.SequenceNumber;
             wrapper.TotalSequenceNumber = ++LocalChannel.SequenceNumber;

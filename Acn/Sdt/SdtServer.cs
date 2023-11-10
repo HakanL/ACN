@@ -55,12 +55,12 @@ namespace Acn.Std
             body.rootLayer = rootHeader;
             body.ReadData(data);
 
-            if (sdtPacket.Header.Vector == (int)StdVectors.UnreliableWrapper || sdtPacket.Header.Vector == (int)StdVectors.ReliableWrapper)
+            if (sdtPacket.Header.Vector == (int)SdtVectors.UnreliableWrapper || sdtPacket.Header.Vector == (int)SdtVectors.ReliableWrapper)
             {
-                StdReliableWrapper wrapper = body as StdReliableWrapper;
+                SdtReliableWrapper wrapper = body as SdtReliableWrapper;
                 if (wrapper.Pdu.Count == 0)
                 {
-                    RaiseClientHeartbeat(remoteClient, wrapper as StdUnreliableWrapper);
+                    RaiseClientHeartbeat(remoteClient, wrapper as SdtUnreliableWrapper);
                     return;
                 }
                 SdtSession session = sdtSessions.Where(s => s.remoteClient.ToString() == remoteClient.ToString() && s.MemberId == wrapper.WrappedHeader.MemberId).FirstOrDefault();
@@ -73,13 +73,13 @@ namespace Acn.Std
                     {
                         switch (pdu.Header.Vector)
                         {
-                            case (int)StdVectors.Leave:
+                            case (int)SdtVectors.Leave:
                                 session.RxLeave(wrapper);
                                 break;
-                            case (int)StdVectors.Connect:
-                                session.RxConnect(wrapper, (StdConnect)pdu);
+                            case (int)SdtVectors.Connect:
+                                session.RxConnect(wrapper, (SdtConnect)pdu);
                                 break;
-                            case (int)StdVectors.Ack:
+                            case (int)SdtVectors.Ack:
                                 session.RxAck(wrapper);
                                 break;
                         }
@@ -105,17 +105,17 @@ namespace Acn.Std
             }
             switch (sdtPacket.Header.Vector)
             {
-                case (int)StdVectors.Join:
-                    RaiseClientJoin(remoteClient, body as StdJoin);
+                case (int)SdtVectors.Join:
+                    RaiseClientJoin(remoteClient, body as SdtJoin);
                     return;
-                case (int)StdVectors.JoinAccept:
-                    RaiseClientJoinAccept(remoteClient, body as StdJoinAccept);
+                case (int)SdtVectors.JoinAccept:
+                    RaiseClientJoinAccept(remoteClient, body as SdtJoinAccept);
                     return;
-                case (int)StdVectors.JoinRefuse:
-                    RaiseClientJoinRefuse(remoteClient, body as StdJoinRefuse);
+                case (int)SdtVectors.JoinRefuse:
+                    RaiseClientJoinRefuse(remoteClient, body as SdtJoinRefuse);
                     return;
-                case (int)StdVectors.Leaving:
-                    RaiseClientLeaving(remoteClient, body as StdLeaving);
+                case (int)SdtVectors.Leaving:
+                    RaiseClientLeaving(remoteClient, body as SdtLeaving);
                     return;
             }
             Debug.WriteLine(string.Format("Unhandled SDT packet {0}", sdtPacket.Header.Vector));
@@ -134,7 +134,7 @@ namespace Acn.Std
 
         private List<SdtSession> sdtSessions = new List<SdtSession>();
 
-        void RaiseClientJoin(IPEndPoint remoteClient, StdJoin sdtRequest)
+        void RaiseClientJoin(IPEndPoint remoteClient, SdtJoin sdtRequest)
         {
             bool Reject = false;
             if (ClientJoinEvent != null)
@@ -151,25 +151,25 @@ namespace Acn.Std
             sdtSessions.Add(session);
         }
 
-        void RaiseClientJoinAccept(IPEndPoint remoteClient, StdJoinAccept sdtRequest)
+        void RaiseClientJoinAccept(IPEndPoint remoteClient, SdtJoinAccept sdtRequest)
         {
             SdtSession session = sdtSessions.Where(s => s.remoteClient.ToString() == remoteClient.ToString() && s.MemberId == sdtRequest.MemberId).FirstOrDefault();
             if (session == null) return;
             session.RxJoinAccept(sdtRequest);
         }
 
-        void RaiseClientJoinRefuse(IPEndPoint remoteClient, StdJoinRefuse sdtRequest)
+        void RaiseClientJoinRefuse(IPEndPoint remoteClient, SdtJoinRefuse sdtRequest)
         {
 
         }
 
-        protected void SendJoinRefuse(IPEndPoint remoteClient, StdJoin sdtRequest)
+        protected void SendJoinRefuse(IPEndPoint remoteClient, SdtJoin sdtRequest)
         {
-            StdJoinRefuse sdtPacket = new StdJoinRefuse();
+            SdtJoinRefuse sdtPacket = new SdtJoinRefuse();
             this.SendPacket(sdtPacket, remoteClient);
         }
 
-        void RaiseClientLeaving(IPEndPoint remoteClient, StdLeaving sdtRequest)
+        void RaiseClientLeaving(IPEndPoint remoteClient, SdtLeaving sdtRequest)
         {
             SdtSession session = sdtSessions.Where(s => s.remoteClient.ToString() == remoteClient.ToString() && s.MemberId == sdtRequest.MemberId).FirstOrDefault();
             if (session == null) return;
@@ -181,7 +181,7 @@ namespace Acn.Std
             session = null;
         }
 
-        void RaiseClientHeartbeat(IPEndPoint remoteClient, StdUnreliableWrapper wrapper)
+        void RaiseClientHeartbeat(IPEndPoint remoteClient, SdtUnreliableWrapper wrapper)
         {
             if (wrapper.LastMemberToAck != wrapper.FirstMemberToAck) return;
             SdtSession session = sdtSessions.Where(s => s.remoteClient.ToString() == remoteClient.ToString() && s.MemberId == wrapper.LastMemberToAck).FirstOrDefault();
@@ -189,7 +189,7 @@ namespace Acn.Std
             session.RxHeartbeat(wrapper);
         }
 
-        void RaiseClientDMPGetProperty(IPEndPoint remoteclient, SdtSession session, StdReliableWrapper wrapper)
+        void RaiseClientDMPGetProperty(IPEndPoint remoteclient, SdtSession session, SdtReliableWrapper wrapper)
         {
 
         }

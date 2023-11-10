@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdLeaving: SdtPdu
+    public class SdtLeaving: SdtPdu
     {
-        public StdLeaving()
-            : base(StdVectors.Leaving)
+        public SdtLeaving()
+            : base(SdtVectors.Leaving)
         {
         }
 

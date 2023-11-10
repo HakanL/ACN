@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdChannelParams : SdtPdu
+    public class SdtChannelParams : SdtPdu
     {
-        public StdChannelParams()
-            : base(StdVectors.ChannelParameters)
+        public SdtChannelParams()
+            : base(SdtVectors.ChannelParameters)
         {
         }
 

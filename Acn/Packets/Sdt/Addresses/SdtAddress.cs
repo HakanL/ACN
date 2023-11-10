@@ -14,9 +14,9 @@ namespace Acn.Packets.Sdt.Addresses
         IPv6 = 2
     }
 
-    public abstract class StdAddress
+    public abstract class SdtAddress
     {
-        public StdAddress(SdtAddressTypes type)
+        public SdtAddress(SdtAddressTypes type)
         {
             Type = type;
         }
@@ -25,7 +25,7 @@ namespace Acn.Packets.Sdt.Addresses
 
         public abstract void WriteData(AcnBinaryWriter data);
 
-        public static StdAddress ReadData(AcnBinaryReader data)
+        public static SdtAddress ReadData(AcnBinaryReader data)
         {
             switch((SdtAddressTypes) data.ReadByte())
             {

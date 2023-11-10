@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdConnectAccept : SdtPdu
+    public class SdtConnectAccept : SdtPdu
     {
-        public StdConnectAccept()
-            : base(StdVectors.ConnectAccept)
+        public SdtConnectAccept()
+            : base(SdtVectors.ConnectAccept)
         {
         }
 

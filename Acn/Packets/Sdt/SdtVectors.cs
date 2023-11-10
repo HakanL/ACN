@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public enum StdVectors
+    public enum SdtVectors
     {
         ReliableWrapper = 1,
         UnreliableWrapper = 2,

@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdSessions : SdtPdu
+    public class SdtSessions : SdtPdu
     {
-        public StdSessions()
-            : base(StdVectors.Sessions)
+        public SdtSessions()
+            : base(SdtVectors.Sessions)
         {
         }
 

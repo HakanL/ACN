@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdUnreliableWrapper:StdReliableWrapper
+    public class SdtUnreliableWrapper:SdtReliableWrapper
     {
-        public StdUnreliableWrapper()
-            : base(StdVectors.UnreliableWrapper)
+        public SdtUnreliableWrapper()
+            : base(SdtVectors.UnreliableWrapper)
         {
         }
 

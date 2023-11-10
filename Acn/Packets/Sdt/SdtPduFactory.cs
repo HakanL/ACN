@@ -14,28 +14,28 @@ namespace Acn.Packets.Sdt
 
         static SdtPduFactory()
         {
-            RegisterPacketType(StdVectors.Ack, typeof(StdAck));
-            RegisterPacketType(StdVectors.ChannelParameters, typeof(StdChannelParams));
-            RegisterPacketType(StdVectors.Connect, typeof(StdConnect));
-            RegisterPacketType(StdVectors.ConnectAccept, typeof(StdConnectAccept));
-            RegisterPacketType(StdVectors.ConnectRefuse, typeof(StdConnectRefuse));
-            RegisterPacketType(StdVectors.Disconnect, typeof(StdDisconnect));
-            RegisterPacketType(StdVectors.Disconnecting, typeof(StdDisconnecting));
-            RegisterPacketType(StdVectors.GetSessions, typeof(StdGetSessions));
-            RegisterPacketType(StdVectors.Join, typeof(StdJoin));
-            RegisterPacketType(StdVectors.JoinAccept, typeof(StdJoinAccept));
-            RegisterPacketType(StdVectors.JoinRefuse, typeof(StdJoinRefuse));
-            RegisterPacketType(StdVectors.Leave, typeof(StdLeave));
-            RegisterPacketType(StdVectors.Leaving, typeof(StdLeaving));
-            RegisterPacketType(StdVectors.Nak, typeof(StdNak));
-            RegisterPacketType(StdVectors.ReliableWrapper, typeof(StdReliableWrapper));
-            RegisterPacketType(StdVectors.Sessions, typeof(StdSessions));
-            RegisterPacketType(StdVectors.UnreliableWrapper, typeof(StdUnreliableWrapper));
+            RegisterPacketType(SdtVectors.Ack, typeof(SdtAck));
+            RegisterPacketType(SdtVectors.ChannelParameters, typeof(SdtChannelParams));
+            RegisterPacketType(SdtVectors.Connect, typeof(SdtConnect));
+            RegisterPacketType(SdtVectors.ConnectAccept, typeof(SdtConnectAccept));
+            RegisterPacketType(SdtVectors.ConnectRefuse, typeof(SdtConnectRefuse));
+            RegisterPacketType(SdtVectors.Disconnect, typeof(SdtDisconnect));
+            RegisterPacketType(SdtVectors.Disconnecting, typeof(SdtDisconnecting));
+            RegisterPacketType(SdtVectors.GetSessions, typeof(SdtGetSessions));
+            RegisterPacketType(SdtVectors.Join, typeof(SdtJoin));
+            RegisterPacketType(SdtVectors.JoinAccept, typeof(SdtJoinAccept));
+            RegisterPacketType(SdtVectors.JoinRefuse, typeof(SdtJoinRefuse));
+            RegisterPacketType(SdtVectors.Leave, typeof(SdtLeave));
+            RegisterPacketType(SdtVectors.Leaving, typeof(SdtLeaving));
+            RegisterPacketType(SdtVectors.Nak, typeof(SdtNak));
+            RegisterPacketType(SdtVectors.ReliableWrapper, typeof(SdtReliableWrapper));
+            RegisterPacketType(SdtVectors.Sessions, typeof(SdtSessions));
+            RegisterPacketType(SdtVectors.UnreliableWrapper, typeof(SdtUnreliableWrapper));
         }
 
-        private static Dictionary<StdVectors, Type> packetStore = new Dictionary<StdVectors, Type>();
+        private static Dictionary<SdtVectors, Type> packetStore = new Dictionary<SdtVectors, Type>();
 
-        public static void RegisterPacketType(StdVectors vector, Type packetType)
+        public static void RegisterPacketType(SdtVectors vector, Type packetType)
         {
 
             if (packetStore.ContainsKey(vector))
@@ -47,7 +47,7 @@ namespace Acn.Packets.Sdt
         public static SdtPdu Build(AcnPduHeader header)
         {
             Type packetType;
-            if (packetStore.TryGetValue((StdVectors)header.Vector, out packetType))
+            if (packetStore.TryGetValue((SdtVectors)header.Vector, out packetType))
             {
                 SdtPdu pdu = (SdtPdu)Activator.CreateInstance(packetType);
                 return pdu;

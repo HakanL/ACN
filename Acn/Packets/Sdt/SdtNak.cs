@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdNak : SdtPdu
+    public class SdtNak : SdtPdu
     {
-        public StdNak()
-            : base(StdVectors.Nak)
+        public SdtNak()
+            : base(SdtVectors.Nak)
         {
         }
 

@@ -9,10 +9,10 @@ using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdJoin : SdtPdu
+    public class SdtJoin : SdtPdu
     {
-        public StdJoin()
-            : base(StdVectors.Join)
+        public SdtJoin()
+            : base(SdtVectors.Join)
         {
         }
         #region Packet Contents
@@ -28,7 +28,7 @@ namespace Acn.Packets.Sdt
 
         public int ReliableSequenceNumber { get; set; }
 
-        public StdAddress DestinationAddress { get; set; }
+        public SdtAddress DestinationAddress { get; set; }
 
         public ChannelParameterBlock ChannelParameterBlock { get; set; }
 
@@ -46,7 +46,7 @@ namespace Acn.Packets.Sdt
             ReciprocalChannel = data.ReadOctet2();
             TotalSequenceNumber = data.ReadOctet4();
             ReliableSequenceNumber = data.ReadOctet4();
-            DestinationAddress = StdAddress.ReadData(data);
+            DestinationAddress = SdtAddress.ReadData(data);
             ChannelParameterBlock = ChannelParameterBlock.ReadData(data);
             AdHocExpiry = data.ReadByte();
         }

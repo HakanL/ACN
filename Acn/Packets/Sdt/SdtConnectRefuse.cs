@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdConnectRefuse : SdtPdu
+    public class SdtConnectRefuse : SdtPdu
     {
-        public StdConnectRefuse()
-            : base(StdVectors.ConnectRefuse)
+        public SdtConnectRefuse()
+            : base(SdtVectors.ConnectRefuse)
         {
         }
 

@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdConnect : SdtPdu
+    public class SdtConnect : SdtPdu
     {
-        public StdConnect()
-            : base(StdVectors.Connect)
+        public SdtConnect()
+            : base(SdtVectors.Connect)
         {
         }
 
-        public StdConnect(int ProtocolId)
-            : base(StdVectors.Connect)
+        public SdtConnect(int ProtocolId)
+            : base(SdtVectors.Connect)
         {
             this.ProtocolId = ProtocolId;   
         }

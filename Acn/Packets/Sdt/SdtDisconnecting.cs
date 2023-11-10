@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdDisconnecting : SdtPdu
+    public class SdtDisconnecting : SdtPdu
     {
-        public StdDisconnecting()
-            : base(StdVectors.Disconnecting)
+        public SdtDisconnecting()
+            : base(SdtVectors.Disconnecting)
         {
         }
 

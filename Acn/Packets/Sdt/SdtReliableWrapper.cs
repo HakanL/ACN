@@ -10,14 +10,14 @@ using System.Threading.Tasks;
 
 namespace Acn.Packets.Sdt
 {
-    public class StdReliableWrapper : SdtPdu
+    public class SdtReliableWrapper : SdtPdu
     {
-        public StdReliableWrapper()
-            : base(StdVectors.ReliableWrapper)
+        public SdtReliableWrapper()
+            : base(SdtVectors.ReliableWrapper)
         {
         }
 
-        protected StdReliableWrapper(StdVectors vector)
+        protected SdtReliableWrapper(SdtVectors vector)
             : base(vector)
         {
         }
