@@ -13,14 +13,17 @@ namespace Acn.Packets.Dmp
     {
         Virtual = 0x80,
         Relative = 0x40,
-        Type3 = 0x30,
-        Type2 = 0x20,
-        Type1 = 0x10,
+        Type_RangeMixedMembers = 0x30,
+        Type_RangeEqualMembers = 0x20,
+        Type_RangeSingle = 0x10,
         Reserved = 0xC,
-        Size_Unknown3 = 0x3,
+        Size_Reserved = 0x3,
         Size_4Octets = 0x2,
-        Size_Unknown1 = 0x1,
-        Actual__Absolute__Type_NonRangeSingleItem__Size_Unknown0 = 0x00,
+        Size_2Octets = 0x1,
+        Actual__Absolute__Type_NonRangeSingle__Size_1Octet = 0x00,
+        Actual = 0x00,
+        Absolute = 0x00,
+        Size_1Octet = 0x00
     }
     public class DmpGetProperty : DmpPdu
     {

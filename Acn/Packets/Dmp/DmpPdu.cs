@@ -33,6 +33,10 @@ namespace Acn.Packets.Dmp
         {
             if (Header.Flags.HasFlag(PduFlags.Header))
                 AddressType = (AddressFlags)data.ReadByte();
+            if (((int)AddressType & 0x03) == (int)AddressFlags.Size_1Octet)
+                ActualAddress = data.ReadByte();
+            if (AddressType.HasFlag(AddressFlags.Size_2Octets))
+                ActualAddress = data.ReadOctet2();
             if (AddressType.HasFlag(AddressFlags.Size_4Octets))
                 ActualAddress = data.ReadOctet4();
         }
@@ -41,15 +45,19 @@ namespace Acn.Packets.Dmp
         {
             if (Header.Flags.HasFlag(PduFlags.Header))
                 data.Write((byte)AddressType);
+            if (((int)AddressType & 0x03) == (int)AddressFlags.Size_1Octet)
+                data.Write((byte)ActualAddress);
+            if (AddressType.HasFlag(AddressFlags.Size_2Octets))
+                data.WriteOctet((short)ActualAddress);
             if (AddressType.HasFlag(AddressFlags.Size_4Octets))
                 data.WriteOctet((int)ActualAddress);
         }
 
         public static DmpPdu Create(AcnPduHeader header)
         {
-            switch((DmpMessages)header.Vector)
+            switch ((DmpMessages)header.Vector)
             {
-                case DmpMessages.GetProperty: return (DmpPdu)Activator.CreateInstance(typeof(DmpGetProperty)); 
+                case DmpMessages.GetProperty: return (DmpPdu)Activator.CreateInstance(typeof(DmpGetProperty));
                 case DmpMessages.Subscribe: return (DmpPdu)Activator.CreateInstance(typeof(DmpSubscribe));
                 case DmpMessages.SubscribeAccept: return (DmpPdu)Activator.CreateInstance(typeof(DmpSubscribeAccept));
                 case DmpMessages.Event: return (DmpPdu)Activator.CreateInstance(typeof(DmpEvent));
@@ -57,7 +65,6 @@ namespace Acn.Packets.Dmp
                     throw new NotImplementedException();
             }
             return null;
-            //return DmpPduFactory.Build(header);
         }
     }
 }

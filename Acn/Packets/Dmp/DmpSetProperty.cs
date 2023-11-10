@@ -15,48 +15,9 @@ namespace Acn.Packets.Dmp
 
         #region Packet Contents
 
-        private byte addressType = 0;
+        public short AddressIncrement { get; set; } = 0;
 
-        public byte AddressType
-        {
-            get { return addressType; }
-            set { addressType = value; }
-        }
-
-        private short firstPropertyAddress = 0;
-
-        public short FirstPropertyAddress
-        {
-            get { return firstPropertyAddress; }
-            set { firstPropertyAddress = value; }
-        }
-
-        private short addressIncrement = 0;
-
-        public short AddressIncrement
-        {
-            get { return addressIncrement; }
-            set { addressIncrement = value; }
-        }
-
-        public virtual short PropertyLength
-        {
-            get { return (short) PropertyData.Length; }
-        }
-
-        private byte[] propertyData = null;
-
-        public byte[] PropertyData
-        {
-            get { return propertyData; }
-            set { propertyData = value; }
-        }
-
-        public byte[] Data
-        {
-            get { return PropertyData; }
-            set { PropertyData = value; }
-        }
+        public byte[] Data { get; set; } = null;
 
         #endregion
 
@@ -64,20 +25,17 @@ namespace Acn.Packets.Dmp
 
         public override void ReadData(AcnBinaryReader data)
         {
-            AddressType = data.ReadByte();
-            FirstPropertyAddress = data.ReadOctet2();
+            base.ReadData(data);
             AddressIncrement = data.ReadOctet2();
-
             int propertyLength = data.ReadOctet2();
-            PropertyData = data.ReadBytes(propertyLength);
+            Data = data.ReadBytes(propertyLength);
         }
 
         public override void WriteData(AcnBinaryWriter data)
         {
-            data.Write(AddressType);
-            data.WriteOctet(FirstPropertyAddress);
+            base.WriteData(data);
             data.WriteOctet(AddressIncrement);
-            data.WriteOctet(PropertyLength);
+            data.WriteOctet(Data.Length);
             WriteContent(data);
         }
 
@@ -90,7 +48,7 @@ namespace Acn.Packets.Dmp
         /// <param name="data">The packet data stream.</param>
         protected virtual void WriteContent(AcnBinaryWriter data)
         {
-            data.Write(PropertyData);
+            data.Write(Data);
         }
 
         #endregion
